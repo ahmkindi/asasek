@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+--color-mud: #400817;
+--color-sand: #D9A171;
+}
+
+html {
+  /* Enables smooth scrolling for anchor links */
+  scroll-behavior: smooth;
+}
+
+main {
+  /* Creates a scroll-snap container that is mandatory in the Y-direction */
+  scroll-snap-type: y mandatory;
+}
+
+section {
+  /* Defines the alignment point for each section within the snap container */
+  scroll-snap-align: start;
+}
