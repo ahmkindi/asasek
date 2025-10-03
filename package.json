@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullpage/react-fullpage": "^0.1.49",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.518.0",
     "next": "15.3.4",
     "react": "^19.0.0",
