@@ -13,12 +13,12 @@ const pluginWrapper = () => {
 
 const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
   return (
-    <div className="h-screen relative flex items-center justify-start overflow-hidden">
-      <div className="w-full z-20 h-full absolute bg-gradient-to-r from-[#D9A566] to-transparent" />
+    <div className="h-dvh relative flex items-center justify-start overflow-hidden">
+      <div className="w-full z-20 h-full absolute bg-gradient-to-r from-[#D9A566] from-60% to-[rgba(217,165,102,0.6)] md:to-transparent" />
       <div className="absolute z-30 h-full w-full md:w-1/2 lg:w-2/5 xl:w-1/3 p-8 flex items-center left-0">
         <div className="text-mud space-y-4 max-w-lg">
-          <h2 className="text-7xl font-black">المــــقدمة</h2>
-          <p className="text-2xl font-semibold leading-relaxed">
+          <h2 className="text-4xl md:text-7xl font-black">المــــقدمة</h2>
+          <p className="text-lg md:text-2xl font-semibold leading-relaxed">
             سعيًا نحو توثيق سيرة الشيخ سليمان بن علي الكندي،
             وتخليدًا لإسهاماته الاجتماعية والإصلاحية، تأتي هذه الندوة
             كمنصة علمية تسهم في جمع وتوثيق إرثه الفكري والعلمي.
@@ -27,7 +27,7 @@ const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
             الشخصية الفريدة.
           </p>
           <div
-            className="mt-6 text-2xl inline-block bg-mud text-sand px-6 py-3 rounded-full font-semibold hover:bg-amber-900 transition-colors cursor-pointer"
+            className="mt-6 text-lg md:text-2xl inline-block bg-mud text-sand px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold hover:bg-amber-900 transition-colors cursor-pointer"
             onClick={onTimelineClick}
           >
             جدوــــل الندوة
@@ -51,10 +51,10 @@ const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
 // Documents Section Component
 const DocumentsSection = () => {
   return (
-    <div className="h-screen bg-mud from-gray-50 to-gray-100 flex items-center justify-center">
+    <div className="h-dvh bg-mud from-gray-50 to-gray-100 flex items-center justify-center">
       <div className="text-center">
-        <h2 className="text-5xl font-bold text-sand mb-4">خريطــــة النــــدوة</h2>
-        <p className="text-2xl text-[#D9A566]">هنا صورة توضح تقسيم القلعة ومواقع المعارض المصاحبة والمسرح</p>
+        <h2 className="text-3xl md:text-5xl font-bold text-sand mb-4">خريطــــة النــــدوة</h2>
+        <p className="text-lg md:text-2xl text-[#D9A566]">هنا صورة توضح تقسيم القلعة ومواقع المعارض المصاحبة والمسرح</p>
       </div>
     </div>
   )

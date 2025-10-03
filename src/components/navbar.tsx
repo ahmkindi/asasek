@@ -36,9 +36,12 @@ export default function Navbar() {
     >
       <div
         className="relative"
-        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseEnter={() => window.innerWidth >= 768 && setIsDropdownOpen(true)}
         onMouseLeave={() => {
-          setIsDropdownOpen(false);
+          if (window.innerWidth >= 768) setIsDropdownOpen(false);
+        }}
+        onClick={() => {
+          if (window.innerWidth < 768) setIsDropdownOpen(!isDropdownOpen);
         }}
       >
         <div className="relative flex flex-col items-center justify-center">
@@ -46,7 +49,7 @@ export default function Navbar() {
             className={`bg-mud rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : ''
               }`}
             style={{
-              padding: isDropdownOpen ? '4px 20px' : '4px 100px',
+              padding: isDropdownOpen ? '4px 20px' : window.innerWidth < 768 ? '4px 20px' : '4px 100px',
             }}
           >
             <Link href="/#hero" className="block">
@@ -56,7 +59,7 @@ export default function Navbar() {
                 width={180}
                 height={100}
                 priority
-                className="transition-transform duration-500 hover:scale-107"
+                className="transition-transform duration-500 hover:scale-107 w-[120px] h-auto md:w-[180px]"
               />
             </Link>
           </div>
@@ -74,9 +77,9 @@ export default function Navbar() {
                     href={link.href}
                     key={link.href}
                     className={`
-                      w-48 py-4 flex items-center justify-center 
+                      w-32 md:w-48 py-2 md:py-4 flex items-center justify-center 
                       transition-all duration-500 rounded-2xl
-                      text-sand hover:text-white
+                      text-sand hover:text-white text-sm md:text-base
                     `}
                   >
                     {link.label}

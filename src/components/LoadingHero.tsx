@@ -24,13 +24,13 @@ const AnimatedLogo = () => {
   }, [])
 
   return (
-    <div className="relative w-[300px] h-[300px] mb-8">
+    <div className="relative w-[200px] h-[200px] md:w-[300px] md:h-[300px] mb-8">
       <Image
         src="/top-logo-text.png"
         alt="Loading Logo 1"
         width={300}
         height={300}
-        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        className={`absolute inset-0 transition-opacity duration-1000 w-full h-full ${currentLogo === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         priority
       />
       <Image
@@ -38,7 +38,7 @@ const AnimatedLogo = () => {
         alt="Loading Logo 2"
         width={300}
         height={300}
-        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        className={`absolute inset-0 transition-opacity duration-1000 w-full h-full ${currentLogo === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         priority
       />
     </div>
@@ -49,10 +49,10 @@ const AnimatedLogo = () => {
 // --- The main reusable component ---
 export default function LoadingHero({ showScrollIndicator, onScrollDown }: LoadingHeroProps) {
   return (
-    <div className="h-screen text-sand flex flex-col items-center justify-center relative">
+    <div className="h-dvh text-sand flex flex-col items-center justify-center relative">
       <div className="flex-grow flex flex-col items-center justify-center">
         <AnimatedLogo />
-        <h1 className="text-5xl text-[#D9A566] pb-2 mt-8">
+        <h1 className="text-3xl md:text-5xl text-[#D9A566] pb-2 md:mt-8">
           نــــدوة الشيــــخ العلامــــة
         </h1>
         <div>
@@ -60,7 +60,8 @@ export default function LoadingHero({ showScrollIndicator, onScrollDown }: Loadi
             src="/signature.png"
             alt="سليمان"
             width={300}
-            height={300}
+            height={167}
+            className="w-[240px] h-auto md:w-[360px]"
             priority
           />
         </div>
@@ -74,7 +75,7 @@ export default function LoadingHero({ showScrollIndicator, onScrollDown }: Loadi
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 text-white"
+            className="h-6 w-6 md:h-8 md:w-8 text-white"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

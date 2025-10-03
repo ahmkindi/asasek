@@ -73,9 +73,9 @@ const timelineData: TimelineSlide[] = [
     time: "6:50",
     duration: "ساعة",
     title: "الجلسة العلمية الأولى",
-    description: "جلسة بحثية متخصصة تناقش مختلف جوانب حياة وإرث الشيخ سليمان الكندي العلمية والفقهية.",
+    description: "جلسة بحثية متخصصة تناقش مختلف جوانب حياة وإرث الشيخ سليمان الكندي ",
     links: [
-      { text: "الشيخ سليمان قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih" },
+      { text: "قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih" },
       { text: "الحياة الاجتماعية للشيخ", url: "/research/social-life-sheikh-sulaiman" },
       { text: "دراسة في شعر الشيخ", url: "/research/poetry-study-sheikh-sulaiman" }
     ]
@@ -111,7 +111,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
   if (!currentData) return null
 
   return (
-    <div className="h-screen bg-gradient-to-br from-sand via-[#F5E6D3] to-[#E8D4B0] relative overflow-hidden">
+    <div className="h-dvh bg-gradient-to-br from-sand via-[#F5E6D3] to-[#E8D4B0] relative overflow-hidden">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -119,69 +119,71 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
         className="h-full w-full flex items-center justify-center relative px-8"
       >
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto h-full items-center">
+        <div className={`grid gap-8 lg:gap-16 max-w-7xl mx-auto h-full items-center ${currentSlide === 5 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
 
-          {/* Image Section */}
-          <motion.div
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="flex justify-center lg:justify-end order-2 lg:order-1"
-          >
+          {/* Image Section - Hidden for Operetta slide */}
+          {currentSlide !== 5 && (
             <motion.div
-              className="relative"
-              animate={{
-                y: [0, -15, 0],
-                transition: {
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }
-              }}
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="flex justify-center lg:justify-end order-2 lg:order-1"
             >
               <motion.div
-                className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+                className="relative"
+                animate={{
+                  y: [0, -15, 0],
+                  transition: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }
+                }}
               >
-                <Image
-                  src={`/timeline/${currentSlide + 1}.png`}
-                  alt={currentData.title}
-                  width={400}
-                  height={400}
-                  className="w-full h-full object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-              </motion.div>
+                <motion.div
+                  className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Image
+                    src={`/timeline/${currentSlide + 1}.png`}
+                    alt={currentData.title}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </motion.div>
 
-              {/* Decorative elements */}
-              <motion.div
-                className="absolute -top-4 -right-4 w-16 h-16 bg-[#BF965A] rounded-full opacity-30"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 180, 360]
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
-              <motion.div
-                className="absolute -bottom-6 -left-6 w-12 h-12 bg-mud rounded-full opacity-30"
-                animate={{
-                  scale: [1, 0.8, 1],
-                  rotate: [360, 180, 0]
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
+                {/* Decorative elements */}
+                <motion.div
+                  className="absolute -top-4 -right-4 w-16 h-16 bg-[#BF965A] rounded-full opacity-30"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360]
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-6 -left-6 w-12 h-12 bg-mud rounded-full opacity-30"
+                  animate={{
+                    scale: [1, 0.8, 1],
+                    rotate: [360, 180, 0]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+              </motion.div>
             </motion.div>
-          </motion.div>
+          )}
 
           {/* Text Section */}
           <motion.div
@@ -195,30 +197,24 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="inline-flex gap-3"
+              className="flex flex-wrap items-center gap-2 md:gap-3 pt-10"
             >
-              <div className="text-2xl lg:text-3xl font-bold text-white px-6 py-3  rounded-2xl shadow-lg bg-mud">
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-mud leading-tight">
+                {currentData.title}
+              </h2>
+              <div className="text-lg md:text-2xl lg:text-3xl font-bold text-white px-2 md:px-6 pt-1.5 pb-1 md:py-3 rounded-2xl shadow-lg bg-mud">
                 {currentData.time}
               </div>
-              <div className="text-lg lg:text-xl font-semibold text-mud px-4 py-3 rounded-2xl bg-white/70 backdrop-blur-sm">
+              <div className="text-sm md:text-lg lg:text-xl font-semibold text-mud px-2 md:px-4 pt-1.5 pb-1 md:py-3 rounded-2xl bg-white/70 backdrop-blur-sm">
                 {currentData.duration}
               </div>
             </motion.div>
-
-            <motion.h2
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="text-4xl lg:text-5xl font-black text-mud leading-tight"
-            >
-              {currentData.title}
-            </motion.h2>
 
             <motion.p
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 1.1 }}
-              className="text-xl lg:text-2xl text-[#5A5A5A] leading-relaxed font-medium"
+              className="text-lg md:text-xl lg:text-2xl text-[#5A5A5A] leading-relaxed font-medium"
             >
               {currentData.description}
             </motion.p>
@@ -231,7 +227,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                 transition={{ duration: 0.8, delay: 1.3 }}
                 className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
               >
-                <h3 className="text-xl font-bold text-mud mb-4 flex items-center gap-2">
+                <h3 className="text-lg md:text-xl font-bold text-mud mb-4 flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   المشاركون
                 </h3>
@@ -240,8 +236,8 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                     <div key={index} className="flex items-center gap-2">
                       <MicVocal className="w-4 h-4 text-[#BF965A]" />
                       <div>
-                        <p className="text-md font-semibold text-gray-800">{performer.name}</p>
-                        <p className="text-sm text-gray-600">{performer.role}</p>
+                        <p className="text-sm md:text-md font-semibold text-gray-800">{performer.name}</p>
+                        <p className="text-xs md:text-sm text-gray-600">{performer.role}</p>
                       </div>
                     </div>
                   ))}
@@ -249,7 +245,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                 {currentData.details && (
                   <div className="mt-2 pt-2 border-t border-gray-200">
                     {currentData.details.map((detail, index) => (
-                      <p key={index} className="text-lg text-gray-700">{detail}</p>
+                      <p key={index} className="text-sm md:text-lg text-gray-700">{detail}</p>
                     ))}
                   </div>
                 )}
@@ -264,18 +260,18 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                 transition={{ duration: 0.8, delay: 1.3 }}
                 className="space-y-3"
               >
-                <h3 className="text-lg font-bold text-mud flex items-center gap-2">
+                <h3 className="hidden md:flex text-base md:text-lg font-bold text-mud items-center gap-2">
                   <FileText className="w-5 h-5" />
                   الأبحاث والوثائق
                 </h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-1 md:gap-3">
                   {currentData.links.map((link, index) => (
                     <a
                       key={index}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-mud text-sand rounded-lg hover:bg-mud/90 transition-colors text-lg font-medium"
+                      className="inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-mud text-sand rounded-lg hover:bg-mud/90 transition-colors text-sm md:text-lg font-medium"
                     >
                       <Download className="w-4 h-4" />
                       {link.text}
@@ -292,9 +288,9 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.7 }}
-          className="absolute top-8 left-8 bg-white/80 backdrop-blur-md rounded-full px-4 py-2 text-mud font-bold"
+          className="absolute top-5 left-4 bg-white/80 backdrop-blur-md rounded-full px-2 pt-1.5 pb-1 text-mud font-bold text-sm md:text-base"
         >
-          {currentSlide + 1} / {timelineData.length}
+          {timelineData.length} / {currentSlide + 1}
         </motion.div>
 
         {/* Progress Bar */}
