@@ -365,7 +365,7 @@ const TimelineContent = () => {
                 <SpeakerCard
                   name="الشيخ د. عبدالله السيابي"
                   title="أستاذ الفقه والأصول - جامعة نزوى"
-                  image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                  image=""
                   research="الشيخ سليمان الكندي قاضياً وفقيهاً"
                   quote="لقد كان الشيخ سليمان الكندي نموذجاً فريداً في الجمع بين العلم والعمل، فقد طبق ما تعلمه من أحكام الفقه في قضائه بعدالة ونزاهة، وترك إرثاً قضائياً يُحتذى به في التعامل مع القضايا المعقدة بحكمة وبصيرة."
                   researchSlug="sheikh-sulaiman-judge-faqih"
@@ -374,7 +374,7 @@ const TimelineContent = () => {
                 <SpeakerCard
                   name="د. محمد حساني"
                   title="أستاذ علم الاجتماع - جامعة السلطان قابوس"
-                  image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                  image=""
                   research="الحياة الاجتماعية للشيخ سليمان الكندي"
                   quote="تميز الشيخ سليمان الكندي بقدرته على التفاعل مع مختلف طبقات المجتمع، فكان قريباً من الناس، يشاركهم أفراحهم وأحزانهم، ويسعى لحل مشاكلهم الاجتماعية بروح الأبوة والحكمة، مما جعله محبوباً ومحترماً من الجميع."
                   researchSlug="social-life-sheikh-sulaiman"
@@ -383,7 +383,7 @@ const TimelineContent = () => {
                 <SpeakerCard
                   name="د. محسن الكندي"
                   title="أستاذ الأدب العربي - كلية الآداب والعلوم الاجتماعية"
-                  image="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face"
+                  image=""
                   research="دراسة في شعر الشيخ سليمان الكندي"
                   quote="شعر الشيخ سليمان الكندي يعكس عمق ثقافته وسعة اطلاعه، فقد نظم في مختلف الأغراض الشعرية بلغة فصيحة وأسلوب بليغ، وتميزت قصائده بالحكمة والموعظة الحسنة، مما يجعلها مدرسة أدبية قائمة بذاتها."
                   researchSlug="poetry-study-sheikh-sulaiman"
@@ -436,7 +436,7 @@ const TimelineContent = () => {
                 <SpeakerCard
                   name="د. عبدالرحمن طعمة"
                   title="أستاذ البلاغة والنقد - جامعة الشارقة"
-                  image="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face"
+                  image=""
                   research="الحجاج في الأحكام القضائية للشيخ سليمان الكندي"
                   quote="تميزت أحكام الشيخ سليمان القضائية بقوة الحجة ووضوح البرهان، فقد كان يستخدم أساليب الحجاج البلاغية في إقناع المتخاصمين بعدالة الحكم، مما يعكس عمق فهمه لعلوم البلاغة وتطبيقها العملي في القضاء."
                   researchSlug="argumentation-judicial-rulings"
@@ -445,7 +445,7 @@ const TimelineContent = () => {
                 <SpeakerCard
                   name="د. خالد الكندي و د. أفلح الكندي"
                   title="أستاذ التاريخ - كلية التربية"
-                  image="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+                  image=""
                   research="الشيخ سليمان الكندي النشأة والتكوين"
                   quote="نشأ الشيخ سليمان في بيئة علمية محفزة، وتلقى تعليمه على يد كبار علماء عصره، مما شكل شخصيته العلمية والفكرية. وقد ساهمت ظروف نشأته في ولاية نخل وما تميزت به من تنوع ثقافي في إثراء تكوينه المعرفي."
                   researchSlug="upbringing-formation-sheikh-sulaiman"

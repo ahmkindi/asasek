@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { Download, Users, Music, FileText } from 'lucide-react'
+import { Download, Users, MicVocal, FileText } from 'lucide-react'
 
 interface TimelineSlide {
   time: string
@@ -16,37 +16,37 @@ interface TimelineSlide {
 
 const timelineData: TimelineSlide[] = [
   {
-    time: "6:00 PM",
+    time: "6:00 مساءً",
     duration: "5 دقائق",
     title: "القرآن الكريم",
     description: "افتتاح الندوة بتلاوة عطرة من القرآن الكريم، تبركاً وطلباً للتوفيق والسداد في هذا المحفل العلمي المبارك."
   },
   {
-    time: "6:05 PM",
+    time: "6:05",
     duration: "5 دقائق",
     title: "كلمة العائلة",
     description: "كلمة ترحيبية من عائلة الشيخ سليمان الكندي، تعبر عن امتنانهم لإقامة هذه الندوة وتقديرهم للباحثين."
   },
   {
-    time: "6:10 PM",
+    time: "6:10",
     duration: "5 دقائق",
     title: "كلمة الجمعية",
     description: "كلمة ترحيبية من جمعية التراث العماني بولاية نخل، تسلط الضوء على أهمية توثيق تراث الأعلام العمانيين."
   },
   {
-    time: "6:15 PM",
+    time: "6:15",
     duration: "10 دقائق",
     title: "المتحدث الرئيس",
     description: "كلمة رئيسية من المتحدث الضيف حول أهمية إحياء تراث العلماء والمفكرين العمانيين.",
   },
   {
-    time: "6:25 PM",
+    time: "6:25",
     duration: "5 دقائق",
     title: "القصيدة الشعرية",
     description: "إلقاء قصيدة شعرية مؤثرة من تأليف الشيخ سليمان الكندي أو قصيدة في رثائه.",
   },
   {
-    time: "6:30 PM",
+    time: "6:30",
     duration: "10 دقائق",
     title: "الأوبريت",
     description: "عرض فني راقٍ يتضمن إلقاء وإنشاد لأبيات من قصائد الشيخ سليمان الكندي.",
@@ -64,38 +64,38 @@ const timelineData: TimelineSlide[] = [
     ]
   },
   {
-    time: "6:40 PM",
+    time: "6:40",
     duration: "10 دقائق",
     title: "الفيلم الوثائقي",
     description: "عرض فيلم وثائقي قصير عن حياة الشيخ سليمان الكندي، يسلط الضوء على أبرز محطات حياته العلمية."
   },
   {
-    time: "6:50 PM",
+    time: "6:50",
     duration: "ساعة",
     title: "الجلسة العلمية الأولى",
     description: "جلسة بحثية متخصصة تناقش مختلف جوانب حياة وإرث الشيخ سليمان الكندي العلمية والفقهية.",
     links: [
-      { text: "الشيخ سليمان قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih.pdf" },
-      { text: "الحياة الاجتماعية للشيخ", url: "/research/social-life-sheikh-sulaiman.pdf" },
-      { text: "دراسة في شعر الشيخ", url: "/research/poetry-study-sheikh-sulaiman.pdf" }
+      { text: "الشيخ سليمان قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih" },
+      { text: "الحياة الاجتماعية للشيخ", url: "/research/social-life-sheikh-sulaiman" },
+      { text: "دراسة في شعر الشيخ", url: "/research/poetry-study-sheikh-sulaiman" }
     ]
   },
   {
-    time: "7:50 PM",
+    time: "7:50",
     duration: "10 دقائق",
     title: "التكريم والختام",
     description: "حفل ختام الندوة يتضمن تكريم الباحثين والمشاركين، وتقديم الشهادات والدروع التذكارية."
   },
   {
-    time: "8:00 PM",
+    time: "8:00",
     duration: "ساعة",
     title: "الجلسة العلمية الثانية",
     description: "تكملة الجلسات البحثية مع التركيز على الجوانب الأدبية والاجتماعية من حياة الشيخ سليمان الكندي.",
     links: [
-      { text: "الحجاج في الأحكام القضائية", url: "/research/argumentation-judicial-rulings.pdf" },
-      { text: "النشأة والتكوين", url: "/research/upbringing-formation-sheikh-sulaiman.pdf" },
-      { text: "الأثر التربوي", url: "/research/educational-impact.pdf" },
-      { text: "رسائل وقصائد: دراسة فنية", url: "/research/letters-poems-artistic-study.pdf" }
+      { text: "الحجاج في الأحكام القضائية", url: "/research/argumentation-judicial-rulings" },
+      { text: "النشأة والتكوين", url: "/research/upbringing-formation-sheikh-sulaiman" },
+      { text: "الأثر التربوي", url: "/research/educational-impact" },
+      { text: "رسائل وقصائد: دراسة فنية", url: "/research/letters-poems-artistic-study" }
     ]
   }
 ]
@@ -197,7 +197,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
               transition={{ duration: 0.8, delay: 0.7 }}
               className="inline-flex gap-3"
             >
-              <div className="text-2xl lg:text-3xl font-bold text-white px-6 py-3 rounded-2xl shadow-lg bg-mud">
+              <div className="text-2xl lg:text-3xl font-bold text-white px-6 py-3  rounded-2xl shadow-lg bg-mud">
                 {currentData.time}
               </div>
               <div className="text-lg lg:text-xl font-semibold text-mud px-4 py-3 rounded-2xl bg-white/70 backdrop-blur-sm">
@@ -238,18 +238,18 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                 <div className="grid grid-cols-2 gap-3">
                   {currentData.performers.map((performer, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <Music className="w-4 h-4 text-[#BF965A]" />
+                      <MicVocal className="w-4 h-4 text-[#BF965A]" />
                       <div>
-                        <p className="text-sm font-semibold text-gray-800">{performer.name}</p>
-                        <p className="text-xs text-gray-600">{performer.role}</p>
+                        <p className="text-md font-semibold text-gray-800">{performer.name}</p>
+                        <p className="text-sm text-gray-600">{performer.role}</p>
                       </div>
                     </div>
                   ))}
                 </div>
                 {currentData.details && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="mt-2 pt-2 border-t border-gray-200">
                     {currentData.details.map((detail, index) => (
-                      <p key={index} className="text-sm text-gray-700">{detail}</p>
+                      <p key={index} className="text-lg text-gray-700">{detail}</p>
                     ))}
                   </div>
                 )}
@@ -275,7 +275,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-mud text-sand rounded-lg hover:bg-mud/90 transition-colors text-sm font-medium"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-mud text-sand rounded-lg hover:bg-mud/90 transition-colors text-lg font-medium"
                     >
                       <Download className="w-4 h-4" />
                       {link.text}

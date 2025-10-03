@@ -1,100 +1,14 @@
 "use client"
 
-import Image from "next/image"
 import { useEffect, useState, useCallback } from "react"
 import HorizontalTimeline from "@/components/horizontal-timeline"
-import ReactFullpage from '@fullpage/react-fullpage'
+import ReactFullpage, { fullpageApi, Item } from '@fullpage/react-fullpage'
+import { usePathname } from "next/navigation"
+import LoadingHero from "@/components/LoadingHero"
+import '../static/fullpage.scrollHorizontally.min';
 
-// Plugin wrapper for scrollHorizontally extension
-const pluginWrapper = () => {
-  require('../static/fullpage.scrollHorizontally.min');
-};
+const pluginWrapper = () => { };
 
-// Isolated AnimatedLogo component - handles its own state without affecting parent
-const AnimatedLogo = () => {
-  const [currentLogo, setCurrentLogo] = useState(1)
-
-  useEffect(() => {
-    const logoInterval = setInterval(() => {
-      setCurrentLogo((prev) => (prev === 1 ? 2 : 1))
-    }, 3000)
-
-    return () => {
-      clearInterval(logoInterval)
-    }
-  }, [])
-
-  return (
-    <div className="relative w-[300px] h-[300px] mb-8">
-      <Image
-        src="/top-logo-text.png"
-        alt="Loading Logo 1"
-        width={300}
-        height={300}
-        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'
-          }`}
-        priority
-      />
-      <Image
-        src="/top-logo-face.png"
-        alt="Loading Logo 2"
-        width={300}
-        height={300}
-        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'
-          }`}
-        priority
-      />
-    </div>
-  )
-}
-
-// Hero Section Component
-const HeroSection = ({ onScrollDown }: { onScrollDown: () => void }) => {
-  return (
-    <div className="h-screen text-sand flex flex-col items-center justify-center relative">
-      <div className="flex-grow flex flex-col items-center justify-center">
-        {/* Isolated animated logo component */}
-        <AnimatedLogo />
-
-        <h1 className="text-5xl text-[#D9A566] pb-2 mt-8">
-          نــــدوة الشيــــخ العلامــــة
-        </h1>
-        <div>
-          <Image
-            src="/signature.png"
-            alt="سليمان"
-            width={300}
-            height={300}
-            priority
-          />
-        </div>
-      </div>
-
-      {/* Scroll Down Indicator - now with working click handler */}
-      <div
-        className="absolute bottom-10 animate-bounce cursor-pointer p-4"
-        onClick={onScrollDown}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </div>
-    </div>
-  )
-}
-
-// About Section Component
 const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
   return (
     <div className="h-screen relative flex items-center justify-start overflow-hidden">
@@ -135,10 +49,10 @@ const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
 // Documents Section Component
 const DocumentsSection = () => {
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+    <div className="h-screen bg-mud from-gray-50 to-gray-100 flex items-center justify-center">
       <div className="text-center">
-        <h2 className="text-5xl font-bold text-gray-800 mb-4">قسم الوثائق</h2>
-        <p className="text-2xl text-gray-600">مجموعة نادرة من الوثائق والمخطوطات</p>
+        <h2 className="text-5xl font-bold text-sand mb-4">خريطــــة النــــدوة</h2>
+        <p className="text-2xl text-[#D9A566]">هنا صورة توضح تقسيم القلعة ومواقع المعارض المصاحبة والمسرح</p>
       </div>
     </div>
   )
@@ -159,21 +73,50 @@ const TimelineSlides = () => {
 
 // Main HomePage Component
 const HomePage = () => {
-  const [fullpageApi, setFullpageApi] = useState<any>(null)
+  const [fullpageApi, setFullpageApi] = useState<fullpageApi | null>(null);
 
-  // Navigation handlers
   const handleScrollDown = useCallback(() => {
     if (fullpageApi) {
-      fullpageApi.moveSectionDown()
+      fullpageApi.moveSectionDown();
     }
-  }, [fullpageApi])
+  }, [fullpageApi]);
 
   const handleGoToTimeline = useCallback(() => {
     if (fullpageApi) {
-      // Move to section 3 (index starts at 1 in fullpage.js)
-      fullpageApi.moveTo(3)
+      fullpageApi.moveTo(3); // Corresponds to the 'timeline' anchor
     }
-  }, [fullpageApi])
+  }, [fullpageApi]);
+
+  // --- NEW: Callback to control navbar visibility ---
+  const handleOnLeave = (destination: Item) => {
+    if (destination.anchor === 'hero') {
+      document.body.classList.add('is-hero-section');
+    } else {
+      document.body.classList.remove('is-hero-section');
+    }
+  };
+
+  // --- NEW: Effect to set initial state and cleanup ---
+  useEffect(() => {
+    // On component mount, hide the navbar if we are on the hero section
+    document.body.classList.add('is-hero-section');
+
+    // On component unmount, remove the class to avoid affecting other pages
+    return () => {
+      document.body.classList.remove('is-hero-section');
+    };
+  }, []);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (fullpageApi) {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        // The moveTo method can accept the anchor string directly
+        fullpageApi.moveTo(hash);
+      }
+    }
+  }, [fullpageApi, pathname]);
 
   return (
     <ReactFullpage
@@ -184,36 +127,37 @@ const HomePage = () => {
       scrollHorizontallyKey={process.env.NEXT_PUBLIC_FULLPAGE_SCROLL_HORIZONTALLY_KEY}
       credits={{ enabled: false }}
       navigation={true}
+      controlArrows={false}
       navigationPosition='right'
       navigationTooltips={['الرئيسية', 'المقدمة', 'جدول الندوة', 'الوثائق']}
-      showActiveTooltip={true}
-      render={({ state, fullpageApi: api }) => {
-        // Store the API reference when it becomes available
+      anchors={['hero', 'about', 'timeline', 'documents-section']}
+      onLeave={(_, destination) => handleOnLeave(destination)}
+      render={({ fullpageApi: api }) => {
         if (api && !fullpageApi) {
-          setFullpageApi(api)
+          setFullpageApi(api);
         }
         return (
           <ReactFullpage.Wrapper>
             <div className="section">
-              <HeroSection onScrollDown={handleScrollDown} />
+              <LoadingHero
+                showScrollIndicator={true}
+                onScrollDown={handleScrollDown}
+              />
             </div>
-
             <div className="section">
               <AboutSection onTimelineClick={handleGoToTimeline} />
             </div>
-
             <div className="section">
               <TimelineSlides />
             </div>
-
             <div className="section">
               <DocumentsSection />
             </div>
           </ReactFullpage.Wrapper>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
 export default HomePage

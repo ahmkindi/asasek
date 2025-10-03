@@ -28,7 +28,7 @@ const researchPapers: ResearchPaper[] = [
     title: "الشيخ سليمان الكندي قاضياً وفقيهاً",
     author: "الشيخ د. عبدالله السيابي",
     authorTitle: "أستاذ الفقه والأصول - جامعة نزوى",
-    authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
+    authorImage: "",
     date: "٢٠٢٥",
     category: "القضاء والفقه",
     abstract:
@@ -58,7 +58,7 @@ const researchPapers: ResearchPaper[] = [
     title: "الحياة الاجتماعية للشيخ سليمان الكندي",
     author: "د. محمد حساني",
     authorTitle: "أستاذ علم الاجتماع - جامعة السلطان قابوس",
-    authorImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+    authorImage: "",
     date: "٢٠٢٥",
     category: "المحور التربوي",
     abstract:
@@ -87,7 +87,7 @@ const researchPapers: ResearchPaper[] = [
     title: "دراسة في شعر الشيخ سليمان الكندي",
     author: "د. محسن الكندي",
     authorTitle: "أستاذ الأدب العربي - كلية الآداب والعلوم الاجتماعية",
-    authorImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&crop=face",
+    authorImage: "",
     date: "٢٠٢٥",
     category: "الأدب",
     abstract:
@@ -116,7 +116,7 @@ const researchPapers: ResearchPaper[] = [
     title: "الحجاج في الأحكام القضائية للشيخ سليمان الكندي",
     author: "د. عبدالرحمن طعمة",
     authorTitle: "أستاذ البلاغة والنقد - جامعة الشارقة",
-    authorImage: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face",
+    authorImage: "",
     date: "٢٠٢٥",
     category: "القضاء والفقه",
     abstract:
@@ -145,7 +145,7 @@ const researchPapers: ResearchPaper[] = [
     title: "الشيخ سليمان الكندي النشأة والتكوين",
     author: "د. خالد الكندي و د. أفلح الكندي",
     authorTitle: "أستاذ التاريخ - كلية التربية",
-    authorImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face",
+    authorImage: "",
     date: "٢٠٢٥",
     category: "مسارات الحياة",
     abstract:

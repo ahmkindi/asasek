@@ -292,10 +292,10 @@ const DocumentsPage = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="w-16 h-1 mx-auto mb-6" style={{ backgroundColor: "#BF965A" }}></div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: "#76424E" }}>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-mud">
             وثائق الشيخ سليمان الكندي
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+          <p className="text-xl text-sand max-w-3xl mx-auto">
             مجموعة نادرة من الوثائق التاريخية والمخطوطات الأصلية للشيخ سليمان بن علي الكندي
           </p>
         </div>

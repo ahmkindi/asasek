@@ -50,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={`bg-mud ${mainFont.className}`} >
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
       </body>
     </html>

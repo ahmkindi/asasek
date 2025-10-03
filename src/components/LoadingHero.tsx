@@ -1,0 +1,93 @@
+"use client"
+
+import Image from "next/image"
+import { useEffect, useState } from "react"
+
+// --- Props for the component ---
+interface LoadingHeroProps {
+  showScrollIndicator: boolean;
+  onScrollDown?: () => void;
+}
+
+// --- Isolated AnimatedLogo component, now inside our reusable component ---
+const AnimatedLogo = () => {
+  const [currentLogo, setCurrentLogo] = useState(1)
+
+  useEffect(() => {
+    const logoInterval = setInterval(() => {
+      setCurrentLogo((prev) => (prev === 1 ? 2 : 1))
+    }, 3000)
+
+    return () => {
+      clearInterval(logoInterval)
+    }
+  }, [])
+
+  return (
+    <div className="relative w-[300px] h-[300px] mb-8">
+      <Image
+        src="/top-logo-text.png"
+        alt="Loading Logo 1"
+        width={300}
+        height={300}
+        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        priority
+      />
+      <Image
+        src="/top-logo-face.png"
+        alt="Loading Logo 2"
+        width={300}
+        height={300}
+        className={`absolute inset-0 transition-opacity duration-1000 ${currentLogo === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        priority
+      />
+    </div>
+  )
+}
+
+
+// --- The main reusable component ---
+export default function LoadingHero({ showScrollIndicator, onScrollDown }: LoadingHeroProps) {
+  return (
+    <div className="h-screen text-sand flex flex-col items-center justify-center relative">
+      <div className="flex-grow flex flex-col items-center justify-center">
+        <AnimatedLogo />
+        <h1 className="text-5xl text-[#D9A566] pb-2 mt-8">
+          نــــدوة الشيــــخ العلامــــة
+        </h1>
+        <div>
+          <Image
+            src="/signature.png"
+            alt="سليمان"
+            width={300}
+            height={300}
+            priority
+          />
+        </div>
+      </div>
+
+      {/* --- Conditionally render the scroll down indicator --- */}
+      {showScrollIndicator && (
+        <div
+          className="absolute bottom-10 animate-bounce cursor-pointer p-4"
+          onClick={onScrollDown}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+      )}
+    </div>
+  )
+}

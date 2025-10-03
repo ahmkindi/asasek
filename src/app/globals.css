@@ -19,3 +19,9 @@ section {
   /* Defines the alignment point for each section within the snap container */
   scroll-snap-align: start;
 }
+
+body.is-hero-section .navbar-container {
+  opacity: 0;
+  transform: translateY(-150%); /* Hides it off-screen */
+  pointer-events: none; /* Disables interaction when hidden */
+}
