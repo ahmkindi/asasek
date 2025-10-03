@@ -36,21 +36,19 @@ export default function Navbar() {
     >
       <div
         className="relative"
-        onMouseEnter={() => window.innerWidth >= 768 && setIsDropdownOpen(true)}
-        onMouseLeave={() => {
-          if (window.innerWidth >= 768) setIsDropdownOpen(false);
-        }}
-        onClick={() => {
-          if (window.innerWidth < 768) setIsDropdownOpen(!isDropdownOpen);
+        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseLeave={() => setIsDropdownOpen(false)}
+        onClick={(e) => {
+          if (!isDropdownOpen) {
+            e.preventDefault();
+            setIsDropdownOpen(true);
+          }
         }}
       >
         <div className="relative flex flex-col items-center justify-center">
           <div
-            className={`bg-mud rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : ''
+            className={`bg-mud px-5 py-1 rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : 'md:px-28'
               }`}
-            style={{
-              padding: isDropdownOpen ? '4px 20px' : window.innerWidth < 768 ? '4px 20px' : '4px 100px',
-            }}
           >
             <Link href="/#hero" className="block">
               <Image
