@@ -5,9 +5,11 @@ import HorizontalTimeline from "@/components/horizontal-timeline"
 import ReactFullpage, { fullpageApi, Item } from '@fullpage/react-fullpage'
 import { usePathname } from "next/navigation"
 import LoadingHero from "@/components/LoadingHero"
-import '../static/fullpage.scrollHorizontally.min';
 
-const pluginWrapper = () => { };
+const pluginWrapper = () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('../static/fullpage.scrollHorizontally.min');
+};
 
 const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
   return (
@@ -109,7 +111,7 @@ const HomePage = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (fullpageApi) {
+    if (fullpageApi && window) {
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         // The moveTo method can accept the anchor string directly
