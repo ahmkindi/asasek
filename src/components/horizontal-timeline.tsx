@@ -19,7 +19,7 @@ const timelineData: TimelineSlide[] = [
     time: "6:00 مساءً",
     duration: "5 دقائق",
     title: "القرآن الكريم",
-    description: "افتتاح الندوة بتلاوة عطرة من القرآن الكريم، تبركاً وطلباً للتوفيق والسداد في هذا المحفل العلمي المبارك."
+    description: "افتتاح الندوة بتلاوة عطرة من القرآن الكريم، تبركاً وطلباً للتوفيق والسداد في هذا المحفل العلمي المبارك. يتلو القرآن الكريم حفيد الشيخ: أواب بن هلال بن علي بن سليمان الكندي."
   },
   {
     time: "6:05",
@@ -141,7 +141,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                 }}
               >
                 <motion.div
-                  className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl"
+                  className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
