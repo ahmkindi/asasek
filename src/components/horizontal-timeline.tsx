@@ -14,6 +14,19 @@ interface TimelineSlide {
   performers?: { name: string; role: string }[]
 }
 
+// Custom images for specific slides (0-indexed)
+const slideImages: { [key: number]: string } = {
+  0: "/quran.png",          // Slide 1: القرآن الكريم
+  2: "/book-club-logo.png", // Slide 3: كلمة الجمعية
+  5: "/camera.png",         // Slide 6: الفلم الوثائقي
+  6: "/men-sitting.png",    // Slide 7: الجلسة العلمية الأولى
+  8: "/men-sitting.png",    // Slide 9: الجلسة العلمية الثانية
+}
+
+const getSlideImage = (slideIndex: number): string => {
+  return slideImages[slideIndex] || `/timeline/${slideIndex + 1}.png`
+}
+
 const timelineData: TimelineSlide[] = [
   {
     time: "6:00 مساءً",
@@ -22,31 +35,25 @@ const timelineData: TimelineSlide[] = [
     description: "افتتاح الندوة بتلاوة عطرة من القرآن الكريم، تبركاً وطلباً للتوفيق والسداد في هذا المحفل العلمي المبارك. يتلو القرآن الكريم حفيد الشيخ: أواب بن هلال بن علي بن سليمان الكندي."
   },
   {
-    time: "6:05",
+    time: "",
     duration: "5 دقائق",
     title: "كلمة العائلة",
     description: "كلمة ترحيبية من عائلة الشيخ سليمان الكندي، تعبر عن امتنانهم لإقامة هذه الندوة وتقديرهم للباحثين."
   },
   {
-    time: "6:10",
+    time: "",
     duration: "5 دقائق",
     title: "كلمة الجمعية",
     description: "كلمة ترحيبية من الجمعية العمانية للكتاب والأدباء، تسلط الضوء على أهمية توثيق تراث الأعلام العمانيين."
   },
   {
-    time: "6:15",
-    duration: "10 دقائق",
-    title: "المتحدث الرئيس",
-    description: "كلمة رئيسية من المتحدث الضيف حول أهمية إحياء تراث العلماء والمفكرين العمانيين.",
-  },
-  {
-    time: "6:25",
+    time: "",
     duration: "5 دقائق",
     title: "القصيدة الشعرية",
     description: "إلقاء قصيدة شعرية مؤثرة من تأليف الشيخ سليمان الكندي أو قصيدة في رثائه.",
   },
   {
-    time: "6:30",
+    time: "",
     duration: "10 دقائق",
     title: "الأوبريت",
     description: "عرض فني راقٍ يتضمن إلقاء وإنشاد لأبيات من قصائد الشيخ سليمان الكندي.",
@@ -64,38 +71,37 @@ const timelineData: TimelineSlide[] = [
     ]
   },
   {
-    time: "6:40",
+    time: "",
     duration: "10 دقائق",
     title: "الفلم الوثائقي",
     description: "عرض فيلم وثائقي قصير عن حياة الشيخ سليمان الكندي، يسلط الضوء على أبرز محطات حياته العلمية."
   },
   {
-    time: "6:50",
+    time: "",
     duration: "ساعة",
     title: "الجلسة العلمية الأولى",
     description: "جلسة بحثية متخصصة تناقش مختلف جوانب حياة وإرث الشيخ سليمان الكندي ",
     links: [
       { text: "قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih" },
-      { text: "الحياة الاجتماعية للشيخ", url: "/research/social-life-sheikh-sulaiman" },
-      { text: "دراسة في شعر الشيخ", url: "/research/poetry-study-sheikh-sulaiman" }
+      { text: "التكوين والإنجاز", url: "/research/formation-achievement" },
+      { text: "الأنماط البنائية والدلالية", url: "/research/structural-semantic-patterns" }
     ]
   },
   {
-    time: "7:50",
+    time: "",
     duration: "10 دقائق",
     title: "التكريم والختام",
     description: "حفل ختام الندوة يتضمن تكريم الباحثين والمشاركين، وتقديم الشهادات والدروع التذكارية."
   },
   {
-    time: "8:00",
+    time: "",
     duration: "ساعة",
     title: "الجلسة العلمية الثانية",
     description: "تكملة الجلسات البحثية مع التركيز على الجوانب الأدبية والاجتماعية من حياة الشيخ سليمان الكندي.",
     links: [
       { text: "الحجاج في الأحكام القضائية", url: "/research/argumentation-judicial-rulings" },
-      { text: "النشأة والتكوين", url: "/research/upbringing-formation-sheikh-sulaiman" },
-      { text: "الأثر التربوي", url: "/research/educational-impact" },
-      { text: "رسائل وقصائد: دراسة فنية", url: "/research/letters-poems-artistic-study" }
+      { text: "رسائل وقصائد: دراسة فنية", url: "/research/letters-poems-artistic-study" },
+      { text: "المنهج التربوي", url: "/research/educational-methodology" }
     ]
   }
 ]
@@ -119,10 +125,10 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
         className="h-full w-full flex items-center justify-center relative px-8"
       >
         {/* Main Content */}
-        <div className={`grid gap-8 lg:gap-16 max-w-7xl mx-auto h-full items-center ${currentSlide === 5 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
+        <div className={`grid gap-8 lg:gap-16 max-w-7xl mx-auto h-full items-center ${currentSlide === 4 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
 
           {/* Image Section - Hidden for Operetta slide */}
-          {currentSlide !== 5 && (
+          {currentSlide !== 4 && (
             <motion.div
               initial={{ x: -100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -146,7 +152,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
                   transition={{ duration: 0.3 }}
                 >
                   <Image
-                    src={`/timeline/${currentSlide + 1}.png`}
+                    src={getSlideImage(currentSlide)}
                     alt={currentData.title}
                     width={400}
                     height={400}
@@ -202,9 +208,11 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide })
               <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-mud leading-tight">
                 {currentData.title}
               </h2>
-              <div className="text-lg md:text-2xl lg:text-3xl font-bold text-white px-2 md:px-6 pt-1.5 pb-1 md:py-3 rounded-2xl shadow-lg bg-mud">
-                {currentData.time}
-              </div>
+              {currentData.time && (
+                <div className="text-lg md:text-2xl lg:text-3xl font-bold text-white px-2 md:px-6 pt-1.5 pb-1 md:py-3 rounded-2xl shadow-lg bg-mud">
+                  {currentData.time}
+                </div>
+              )}
               <div className="text-sm md:text-lg lg:text-xl font-semibold text-mud px-2 md:px-4 pt-1.5 pb-1 md:py-3 rounded-2xl bg-white/70 backdrop-blur-sm">
                 {currentData.duration}
               </div>

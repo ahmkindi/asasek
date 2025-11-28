@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Download, MessageCircle, X, Calendar, BookOpen, ExternalLink } from "lucide-react"
+import { MessageCircle, X, Calendar, BookOpen, ArrowRight } from "lucide-react"
 import { useParams } from "next/navigation"
+import Link from "next/link"
 
 interface ResearchPaper {
   id: string
@@ -140,8 +141,8 @@ const ResearchPaperPage = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">البحث غير موجود</h1>
-          <a href="/timeline" className="text-blue-600 hover:underline">
-            العودة إلى الجدول
+          <a href="/research" className="text-blue-600 hover:underline">
+            العودة إلى البحوث
           </a>
         </div>
       </div>
@@ -151,6 +152,15 @@ const ResearchPaperPage = () => {
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        {/* Back Button */}
+        <Link
+          href="/research"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+        >
+          <ArrowRight className="w-5 h-5" />
+          <span>العودة إلى البحوث</span>
+        </Link>
+
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8">
           <div className="flex flex-col lg:flex-row gap-8">
@@ -175,15 +185,6 @@ const ResearchPaperPage = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href={paper.downloadUrl}
-                  download
-                  className="inline-flex items-center justify-center px-6 py-3 text-white rounded-lg transition-colors hover:opacity-90"
-                  style={{ backgroundColor: "#76424E" }}
-                >
-                  <Download className="w-5 h-5 ml-2" />
-                  تحميل البحث
-                </a>
                 <button
                   onClick={() => setShowQuestionDialog(true)}
                   className="inline-flex items-center justify-center px-6 py-3 border-2 rounded-lg transition-colors hover:bg-yellow-50"

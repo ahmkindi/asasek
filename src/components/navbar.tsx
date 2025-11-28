@@ -26,7 +26,7 @@ export default function Navbar() {
   // --- MODIFIED: Updated links as per your request ---
   const navLinks = [
     { href: '/#timeline', label: 'جدوــــل الندوة' },
-    { href: '/interviews', label: 'المقابلات والفلم' },
+    { href: '/research', label: 'البحوث' },
     { href: '/documents', label: 'الوثائق' },
   ];
 
