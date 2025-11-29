@@ -64,7 +64,7 @@ const DocumentsSection = () => {
 const TimelineSlides = () => {
   return (
     <>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => (
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
         <div key={index} className="slide">
           <HorizontalTimeline currentSlide={index} onSlideChange={() => { }} />
         </div>
