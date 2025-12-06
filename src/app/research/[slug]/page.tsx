@@ -1,260 +1,66 @@
-"use client"
-
-import { useState } from "react"
-import { MessageCircle, X, Calendar, BookOpen, ArrowRight } from "lucide-react"
-import { useParams } from "next/navigation"
 import Link from "next/link"
+import { notFound } from "next/navigation"
+import { getPaperBySlug } from "../researchData"
 
-interface ResearchPaper {
-  id: string
-  slug: string
-  title: string
-  author: string
-  authorSummary: string
-  date: string
-  category: string
-  summary: string
-  downloadUrl: string
+interface PageProps {
+  params: Promise<{ slug: string }>
 }
 
-const researchPapers: ResearchPaper[] = [
-  {
-    id: "formation-achievement",
-    slug: "formation-achievement",
-    title: "التكوين والإنجاز",
-    author: "د. خالد بن سليمان بن مهنا الكندي و د. أفلح بن أحمد بن سليمان الكندي",
-    authorSummary: "د. خالد: أستاذ مشارك، رئيس قسم اللغة العربية وآدابها بجامعة السلطان قابوس، روائي له ١٠ أعمال سردية، و٢٢ بحثا محكما، مؤسس نظرية السبر لحل مشكلة المصطلحات والمفاهيم والتصنيفات. د. أفلح: أستاذ مساعد في مناهج وطرائق التدريس بجامعة نزوى، حاصل على الدكتوراة في علوم التربية، تقلّد عدة مناصب قيادية بوزارة التربية والتعليم آخرها مدير عام تعليمية الداخلية.",
-    date: "١٠/٢٠٢٥",
-    category: "النشأة والتكوين",
-    summary: "يُقدِّم هذا البحث دراسة وافية عن الشيخ سليمان بن علي الكندي، أحد أبرز أعلام ولاية نخل في القرن الرابع عشر الهجري، من خلال تحليل تكوينه العلمي ومسيرته المهنية والاجتماعية. وُلد في العامرات، ونشأ يتيم الأب، ثم انتقل إلى نخل سنة 1350هـ الموافق 1931م، حيث بدأ مسيرة علمية طويلة جمع فيها بين التعليم والقضاء والإصلاح الاجتماعي. تلقّى علومه الأولى على يد بعض الكتاتيب وبرعاية الشيخ سعيد بن ناصر الكندي، ثم واصل طلب العلم على يد عددٍ من العلماء، منهم القاضي إبراهيم بن سيف الكندي، والشيخ محمد بن سعيد الكندي، والشيخ سعيد بن أحمد الكندي، والشيخ محمد بن عبدالله السالمي، حتى أصبح معلمًا في مدرسة الغريض سنة 1359هـ/1940م. تتلمذ على يديه أجيال من العلماء والقضاة، أمثال موسى بن علي، وسليمان بن مهنا، وعبدالله بن سيف الكندي. مارس القضاء في عدد من ولايات السلطنة كصحم، ونخل، والسويق، وإزكي، وعبري، وصور، والسيب، وصحار، والرستاق، والعوابي، وكان مثالًا في الورع والعدل والتواضع. كما تولّى الإشراف على أوقاف نخل، وأبدى اهتمامًا كبيرًا بالزراعة وإحياء الأراضي. وثَّق البحث شواهد عديدة تدل على شغف الشيخ بالتعليم وغرس القيم في الناشئة، وكانت مجالسه عامرة بالقراءة في مختلف الكتب وخاصة الفقهية، ومتابعة الأحداث الثقافية والعلمية حتى آخر حياته. كما عرَّف البحث بتراث الشيخ الأدبي والعلمي من المنظومات والقصائد الفقهية والوعظية، وعرَّج على بعض المخطوطات التي تعبّر عن أمانته واهتماماته. يخلص البحث إلى أن الشيخ سليمان كان شخصية إصلاحية جمعت بين العلم والعمل، وتجسدت في سيرته قيم الورع والتواضع والعطاء، حتى غدا أحد رموز نخل الدينية والاجتماعية",
-    downloadUrl: "/papers/formation-achievement.pdf",
-  },
-  {
-    id: "sheikh-sulaiman-judge-faqih",
-    slug: "sheikh-sulaiman-judge-faqih",
-    title: "الشيخ سليمان بن علي الكندي فقيهًا وقاضيًا",
-    author: "فضيلة الشيخ القاضي/ عبدالله بن راشد السيابي",
-    authorSummary: "حاصل على الإجازة العالية من معهد العلوم الشرعية بسلطنة عمان، و ماجستير من الجامعة الأردنية، ودكتوراه في العلوم الإسلامية من جامعة الزيتونة بتونس، وتدرج في العمل من نـائــب قـاض ثم قاض بالمحاكم الابتدائية ثم قاض بمحكمة الاستئناف، وانتدب للعمل بلجنة التظلّمات بديوان البلاط السلطاني، كما عمل قاض بالمحكمة العليا، ونائبا لرئيس المحكمـة العليــا، وعمل عضوا في مجلس الدولة، له عدّة مؤلّفات تزيد على الأربعين والكثير منها قد طبع ونشر، في تفسير القرآن الكريم والفقه والقضاء واللغة والأدب والتأريخ والسلوك.",
-    date: "١٠/٢٠٢٥",
-    category: "القضاء والفقه",
-    summary: "يتناول البحث سيرة الشيخ سليمان بن علي الكندي، أحد القضاة العمانيين الذين جمعوا بين الفقه والقضاء، مبرزًا مكانته العلمية ومنهجه في تطبيق الشريعة ، ويوضّح الباحث أن القضاء في الإسلام من أشرف المناصب ، وهو مهنة الأنبياء والمرسلين ، يقوم على إقامة العدل ورفع الظلم ، وأن القاضي الصادق يجاهد في سبيل الله بالحق والحكمة، ويعرض نماذج من أحكام الشيخ سليمان التي صدرت في بوشر والرستاق ، منها اعتماده على شهادة العدول في إثبات الملك، وحكمه في قضايا الميراث وفق الشريعة الإسلامية، ومن أحكامه أيضا في إقرار تغيير نظام توزيع مياه الأفلاج من النجوم والظل إلى الساعة مراعاةً لدقة الزمن ومتغيّرات العصر،  كما أصدر أحكامًا اعتمد فيها على اليمين عند غياب البيّنة، وتولى بنفسه معاينة مواقع النزاع في القضايا التي تحتاج إلى انتقال ونظر ومعاينة تحقيقًا للعدالة. ويبرز البحث جانبًا فقهيًا ثريًا من خلال أجوبة الشيخ عن أسئلة وردته نثرًا وشعرًا، منها إباحة الفطر للمسافر والمريض استنادًا إلى القرآن والسنة، وحكم الأرباح الثابتة للودائع في المصارف، لأنها من القرض الذي يجرّ نفعًا، وإفتاؤه بحفظ الأمانات حتى يطالب بها أصحابها أو ورثتهم.  كما تناول بعض المسائل في صلاة الجمعة، وفي زكاة النقود الورقية، حيث نقل الخلاف حول وجوبها، وشرح أحكام السترة في الصلاة وفق السنة النبوية. ويختتم الباحث بدعوة إلى إحياء تراث الشيخين سليمان بن علي الكندي وموسى بن علي الكندي لما في مراسلاتهما من قيم علمية وقضائية أصيلة تحفظ ذاكرة القضاء العماني.",
-    downloadUrl: "/papers/sheikh-sulaiman-judge-faqih.pdf",
-  },
-  {
-    id: "argumentation-judicial-rulings",
-    slug: "argumentation-judicial-rulings",
-    title: "الحجاج في الأحكام القضائية للشيخ سليمان بن علي الكندي",
-    author: "الدكتور عبد الرحمن طعمة حسن",
-    authorSummary: "أستاذ اللسانيات الحديثة المساعد، قسم اللغة العربية، كلية الآداب والعلوم الاجتماعية، جامعة السلطان قابوس، وكلية الآداب، جامعة القاهرة، مصر. أصدر حوالي 30 كتابا منفردا وباشتراك في مجال اللسانيات، والدراسات القرآنية، ونظرية المعرفة، والنظرية الثقافية، كما قام بترجمة عدد من الدراسات النوعية المهمة ذات الصلة، وله أكثر من 40 بحثًا منشورا بالعربية وغيرها في المجالات المذكورة، وشارك في أكثر من 40 مؤتمرا دوليا وإقليميا في مختلف الفروع العلمية البينية.",
-    date: "١٠/٢٠٢٥",
-    category: "القضاء والفقه",
-    summary: "يقع هذا البحث ضمن الدراسات اللسانية الحجاجية، التي تحاول فهم الخطاب اللغوي في ضوء أسس الحجاج والجدل، واشتغالاته على مستوى الانفعالات (سايكولوجيًّا)، وعلى مستوى التمظهرات اللسانية التواصلية، في سياق انفتاح نسق اللغة على الأنساق التصورية المختلفة في إطار العلاقات الحاكمة لروابط الأذهان بالأعيان. ولذلك فقد شرعنا في الورقة بتحليل موجز للجانب التداولي لظاهرة الحجاج، مع بيان بعض الدلالات المختلفة لمفهوم (الصّوري). ثم انتقلنا إلى بسط القول في مسألة قواعد المواضعة (أو الذّهن الاستدلالي)، مع بيان وسائل الحجاج والإقناع في فضاء التأويل.  ثم انتقل بنا البحث إلى معالجة مظاهر الخطاب القضائي وعلاقته بالحجاج اللسانيّ؛ إذ إنّ الخطاب القضائيّ في إطار اللسانيات الجنائية هو خطابٌ حجاجيّ، لأنه يستند إلى حُجّية اللغة، فضلًا عن حُجية القوانين والأعراف والتقاليد، وهو ما حاولنا بيانه وشرحه، مع توضيح أهم السمات العامة لهذا الخطاب القضائي. وعلى جهة الإجمال، عالج القسم الأول من الدراسة مسألة اللسانيات القضائية، مع شرح بعض البنود النظرية الأساسية حول علاقتها بالحجاج. وفي القسم الثاني استعرضنا تحليلًا لبعض وثائق الأحكام القضائية للشيخ \"سليمان الكندي\"، لنتبيّن منها فاعلية اللغة وتأثيرها في استصدار الحكم على أسس البرهان (قواعد التفكير والاستدلال العقلي)، والتدليل اللساني.",
-    downloadUrl: "/papers/argumentation-judicial-rulings.pdf",
-  },
-  {
-    id: "structural-semantic-patterns",
-    slug: "structural-semantic-patterns",
-    title: "الأنساق البنائية والدلالية في شعر الشيخ الكندي، مقاربة نصيّة",
-    author: "د. محمد مصطفى حسانين",
-    authorSummary: "ناقد أدبي مصري متخصص في الأدب القديم والحديث. عمل في جامعات المدينة العالمية وجازان وقطر، وأصدر خمسة عشر كتابًا وأكثر من أربعين بحثًا محكّمًا، وشارك في مؤتمرات دولية متعددة. أسس برنامج تعليم العربية للناطقين بغيرها في جامعة جازان، يركز مشروعه البحثي على قضايا الأنواع الأدبية وتحولاتها، مع اهتمام باللسانيات الحديثة خاصة اللسانيات المعرفية والمقاربة المعرفية للأدب. من أبرز كتبه: استعادة المكان، والمقطعات الشعرية، والصورة والسرد والعالم، وغيرها. فضلا عن تحريره لعدد كبير من الكتب الجماعية. حصل على جوائز نقدية وأدبية عربية.",
-    date: "١٠/٢٠٢٥",
-    category: "الدراسات اللغوية والأدبية",
-    summary: "يتناول هذا البحث تجربة الشيخ سليمان بن علي الكندي (1908–2002م) الذي جمع بين الفقه والشعر، وجعل من الكلمة أداةً للتعبير عن رؤيته الفكرية والدينية والاجتماعية. فقد تميزت شخصيته بالثراء العلمي، والانفتاح على دوائر البيان والوجدان، مما انعكس في شعره بوصفه وثيقة ثقافية تكشف عن ملامح عصره، وتضيء الجوانب الفكرية التي ارتبطت بالتحولات العمانية في القرن العشرين. يهدف البحث إلى مقاربة شعر الكندي من زاوية الأنساق البنائية والدلالية، حيث يشكل النص لديه بناءً متماسكًا يقوم على انتظام الإيقاع والصورة، وتتكامل فيه البنية الشكلية مع الدلالة. فالقصائد القليلة التي وصلت إلينا تحمل ملامح أسلوب مميز، يتعامل مع اللغة بوصفها جهازًا رمزيًا يستدعي قراءات متعددة، ويكشف عن توتر بين المثال والواقع، وبين الذات والجماعة. ومن خلال تحليل نصوصه، يتضح أن شعر الكندي ينهل من معارفه الفقهية واللغوية، ويوظفها في خدمة غايات تعليمية وإصلاحية. وقد تميز بالتزامه بالأوزان التقليدية، ولا سيما بحر الرمل، وبغزارة الصور البيانية المحكمة التي تمنح النص عمقًا دلاليًا. أما موضوعاته، فقد تنوعت بين تقريظ العلماء، والخصائص النبوية، والردود الفكرية، مما جعله امتدادًا للخطاب الديني والأدبي في آن واحد. ويبرز اهتمامه بفن التخميس، ولا سيما تخميسه لامية ابن الوردي، بوصفه شكلًا يجمع بين المعارضة والشرح، ويتيح إعادة إنتاج النصوص الكلاسيكية ضمن أفق تعليمي وأخلاقي. ومن خلال هذا الفن يظهر حرص الكندي على تقريب الحكمة إلى المتلقي، وتوسيع معانيها بالاستناد إلى القرآن والسنة، وتجارب الحياة اليومية. وبذلك، فإن شعر الشيخ سليمان بن علي الكندي يمثل مشروعًا أدبيًا وفكريًا متكاملًا، تتشابك فيه الأنساق البنائية والدلالية مع رؤى دينية واجتماعية، لتمنح نصوصه قيمة خاصة في المشهد الثقافي العماني.",
-    downloadUrl: "/papers/structural-semantic-patterns.pdf",
-  },
-  {
-    id: "letters-poems-artistic-study",
-    slug: "letters-poems-artistic-study",
-    title: "رسائل الشيخ سليمان بن علي الكندي وقصائده: دراسة فنية",
-    author: "أ. النضر بن سليمان بن ناصر الخنجري",
-    authorSummary: "حاصل على درجة الماجستير تخصص (اللغة العربية- أدب قديم) بتقدير امتياز مع مرتبة الشرف عام 2019 من جامعة نزوى، طالب في جامعة مالايا (UM) بمملكة ماليزيا الاتحادية تخصص دكتوراة في فلسفة اللغة، أصدر كتاب بعنوان \"المعلم سعيد\" سيرة الشيخ القاضي سعيد بن محمد بن سعيد الكندي، ويعمل محاضرا بنظام العمل الجزئي في جامعة الشرقية- كلية الآداب.",
-    date: "١٠/٢٠٢٥",
-    category: "الدراسات اللغوية والأدبية",
-    summary: "تناول البحث المعنون بـ\"رسائل وقصائد الشيخ سليمان بن علي الكندي: دراسة فنية\" الرسائل التي كتبها الشيخ موجهة إلى أبنائه إبان كانوا خارج عمان، ونتاجه الشعري المتمثل في بعض القصائد ذات الطابع العلمي وأخرى تحمل معاني الإصلاح والتوجيه. اعتمدت الدراسة المنهج الوصفي التحليلي، مركزة على الجانب الموضوعي أولا، والفني ثانيا. ناقش الجانب الموضوعي الأفكار والمعاني التي حوتها هذه الرسائل والقصائد، مثل الأمور التي كان الشيخ يحاور فيها أولاده، كالاطمئنان على صحتهم وعلى سير الدراسة، وطلبه من بعضهم القيام ببعض المهمات، أو طلب إبداء الرأي في بعض المشكلات الاجتماعية. كما يطمئنهم على أحوال أسرهم وما يجد في تنقلاته في العمل، محاولين استخلاص المعاني التربوية والخلقية التي بدت واضحة في طبيعة المخاطبات التي كانت بين الشيخ وأبنائه. أما في جانب القصائد فأمَّ البحث الوقوف على الأغراض الشعرية فيها، فمنها ما احتوى غرض التقريظ، وأخرى كانت جوابا لمسألة فقهية، وثالثة وجه الشيخ فيها نداءه إلى علماء عمان طالبا منهم الالتفات حول الحاكم، والتاريخ الذي كتبت فيه القصيدة يعطينا دلالة على أهمية موضوع القصيدة حينها. كما وقف البحث على الأفكار الجزئية التي تضمنتها القصائد.  أما في الشق الثاني من الورقة، فقد حاول الباحث استخراج الظواهر الأسلوبية التي امتاز بها الشيخ. تمثلت هذه الظواهر في \"الحذف\" الذي استعمله في رسائله كثيرا سواء كان في الحروف أو الأسماء أو الأفعال. مثل حذفه للفعل والفاعل في قوله \"السلام العاطر\" بتقدير الفعل والفاعل \"أهدي السلام\" أو أرسل السلام. كما تناول البحث ظواهر أسلوبية أخرى مثل التقديم والتأخير. وأخيرا وقف الباحث على الجانب الموسيقي في القصائد. متناولا البحور العروضية والقوافي وما يمكن أن تحمله من دلالات. والظواهر التي تتعلق بالشعر -عادة- مثل: التكرار والترصيع.",
-    downloadUrl: "/papers/letters-poems-artistic-study.pdf",
-  },
-  {
-    id: "educational-methodology",
-    slug: "educational-methodology",
-    title: "المنهج التربوي للشيخ سليمان بن علي بن سليمان الكندي: القِيَم والطرائق",
-    author: "أ.تسنيم بنت أحمد بن سليمان الكندية و أ.بصائر بنت أحمد بن سليمان الكندية",
-    authorSummary: "أ. تسنيم: حاصلة على بكالوريوس في التربية بتخصص اللغة العربية من جامعة السلطان قابوس 2010م، وبكالوريوس في الدراسات الإسلامية من كلية العلوم الشرعية 2019. تمتلك خبرة تربوية تمتد لأكثر من خمسة عشر عامًا. أ. بصائر: باحثة ماجستير في مناهج اللغة العربية وطرق تدريسها بكلية التربية بجامعة السلطان قابوس، حاصلة على بكالوريوس التربية في الطفولة المبكرة 2016م، معلمة لغة عربية ومهتمة بالتعليم المبكر.",
-    date: "١٠/٢٠٢٥",
-    category: "المنهج التربوي",
-    summary: "يأتي هذا البحث ليقف عند الأثر التربوي للشيخ سليمان بن علي الكندي؛ حيث يسلط الضوء على الأبعاد التربوية العميقة في سيرته، من خلال رصد ما اتّسمت به شخصيّته من قيم راسخة، واستجلاء ما انتهجه من طرائق عمليّة كان لها أبلغ الأثر في من حوله من خلال استنطاق المواقف؛ إحياء للأثر الكامن فيها، فالتربية ليست تأثيرًا لحظيًّا، بل بناءٌ متراكم يتشكّل من القيم التي تُغرس، والأساليب التي تُمارس، ثم يتبع ذلك تأطير الممارسات والطرائق التربوية التي انتهجها الشيخ ضمن سياقٍ تربويٍّ معاصر، لا بغرض تحميلها ما لم تحتمله، بل لإظهار مدى انسجامها معه، فتربيته سبقت التنظير، ولم تأت النظريات الحديثة إلا لتُفسّر ما كان يمارسه بفطرته، وتقرَ ما كان ينتهجه بعفويته. اعتمد هذا البحث منهجًا نوعيًّا تحليليًّا، لا يكتفي بتسطير الوقائع، بل يقرأ ما ينطوي خلف سطورها من قيم، ويستخرج ما تُخفيه من طرائق تربوية متجذّرة في السلوك والفكر والموقف، من خلال الإنصات إلى الأثر، ثم إعادة تشكيل الممارسات والطرائق وصياغتها في قالبٍ يتّسق مع المفاهيم والنظريات التربوية المعاصرة.  وقد استند في سبيل ذلك إلى مصادر حيّة ونصوص شاهدة، تمثّلت في الروايات الشفوية، والاستجابات الإلكترونية التي نقلها بعض أحفاده وتلاميذه ومَن كان حوله، كما استضاء البحث بما خطّه الشيخ من مخطوطات ورسائل مكتوبة، تحمل في عباراتها ملامح فكره، وامتداد رؤيته التربوية، في محاولة متواضعة لالتقاط الأثر التربوي الكامن فيها؛ فجاء هذا البحث امتنانًا لتلك التربية، وإنصافًا لذلك الأثر، ورغبةً في ألا يظل هذا النور حبيس الذكرى، بل أن يُدوَّن، ويُستلهم، ويُورَّث.",
-    downloadUrl: "/papers/educational-methodology.pdf",
-  },
-]
-
-const QuestionDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const [question, setQuestion] = useState("")
-
-  if (!isOpen) return null
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-gray-900">اطرح سؤالاً</h3>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">سؤالك حول البحث</label>
-            <textarea
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              rows={4}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-              placeholder="اكتب سؤالك هنا..."
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              className="flex-1 px-4 py-2 text-white rounded-lg transition-colors"
-              style={{ backgroundColor: "#76424E" }}
-            >
-              إرسال السؤال
-            </button>
-            <button onClick={onClose} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-              إلغاء
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const ResearchPaperPage = () => {
-  const params = useParams()
-  const [showQuestionDialog, setShowQuestionDialog] = useState(false)
-
-  const paper = researchPapers.find((p) => p.slug === params.slug)
+export default async function ResearchPaperPage({ params }: PageProps) {
+  const { slug } = await params
+  const paper = getPaperBySlug(slug)
 
   if (!paper) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">البحث غير موجود</h1>
-          <a href="/research" className="text-blue-600 hover:underline">
-            العودة إلى البحوث
-          </a>
-        </div>
-      </div>
-    )
+    notFound()
   }
 
+  const hasMultipleAuthors = paper.authors.length > 1
+
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        {/* Back Button */}
-        <Link
-          href="/research"
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
-        >
-          <ArrowRight className="w-5 h-5" />
-          <span>العودة إلى البحوث</span>
-        </Link>
-
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-4">
-                <span
-                  className="px-3 py-1 rounded-full text-sm font-medium text-white"
-                  style={{ backgroundColor: "#76424E" }}
-                >
-                  {paper.category}
-                </span>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Calendar className="w-4 h-4" />
-                  <span>{paper.date}</span>
-                </div>
-              </div>
+        <div className="rounded-lg p-8 mb-8 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-sand mb-6">{paper.title}</h1>
 
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{paper.title}</h1>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900">{paper.author}</h3>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => setShowQuestionDialog(true)}
-                  className="inline-flex items-center justify-center px-6 py-3 border-2 rounded-lg transition-colors hover:bg-yellow-50"
-                  style={{ borderColor: "#BF965A", color: "#76424E" }}
-                >
-                  <MessageCircle className="w-5 h-5 ml-2" />
-                  اطرح سؤالاً
-                </button>
-              </div>
-            </div>
-
+          <div className="flex w-full items-center justify-center gap-4 md:gap-8 mb-6">
+            {paper.authors.map((author, index) => (
+              <h3 key={index} className="text-xl text-wrap md:text-2xl font-bold text-sand">
+                {author.name}
+              </h3>
+            ))}
           </div>
         </div>
 
-        {/* Content */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            {/* Summary */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: "#BF965A" }}
-                >
-                  <BookOpen className="w-5 h-5 text-white" />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">ملخص البحث</h2>
-              </div>
-              <p className="text-gray-700 leading-relaxed text-lg">{paper.summary}</p>
-            </div>
-          </div>
+        {/* Summary - respecting paragraphs */}
+        <div className="space-y-6 mb-12">
+          {paper.summary.map((paragraph, index) => (
+            <p key={index} className="text-sand leading-10 md:leading-12 text-xl md:text-2xl text-justify">
+              {paragraph}
+            </p>
+          ))}
+        </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Author Info */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">عن الباحث</h3>
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">{paper.author}</h4>
-                <p className="text-gray-600 text-sm leading-relaxed">{paper.authorSummary}</p>
-              </div>
+        {/* Author Cards */}
+        <div className={`flex flex-col ${hasMultipleAuthors ? 'md:flex-row' : ''} gap-6 mb-12`}>
+          {paper.authors.map((author, index) => (
+            <div key={index} className={`${hasMultipleAuthors ? 'flex-1' : 'w-full'} bg-mud rounded-lg p-6`}>
+              <h4 className="text-xl md:text-2xl font-bold text-sand mb-4 text-center">{author.name}</h4>
+              <p className="text-sand text-lg md:text-xl leading-relaxed text-justify">{author.summary}</p>
             </div>
+          ))}
+        </div>
 
-            {/* Related Papers */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">أبحاث ذات صلة</h3>
-              <div className="space-y-3">
-                {researchPapers
-                  .filter((p) => p.id !== paper.id && p.category === paper.category)
-                  .slice(0, 3)
-                  .map((relatedPaper) => (
-                    <a
-                      key={relatedPaper.id}
-                      href={`/research/${relatedPaper.slug}`}
-                      className="block p-3 rounded-lg border border-gray-200 hover:border-yellow-600 hover:bg-yellow-50 transition-colors"
-                    >
-                      <h4 className="font-medium text-gray-900 text-sm mb-1">{relatedPaper.title}</h4>
-                      <p className="text-gray-600 text-xs">{relatedPaper.author}</p>
-                    </a>
-                  ))}
-              </div>
-            </div>
-          </div>
+        {/* Back to all research button */}
+        <div className="flex justify-center">
+          <Link
+            href="/research"
+            className="inline-flex items-center justify-center px-8 py-4 bg-sand text-mud rounded-full text-lg font-bold hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            جميع البحوث العلمية
+          </Link>
         </div>
       </div>
-
-      <QuestionDialog isOpen={showQuestionDialog} onClose={() => setShowQuestionDialog(false)} />
     </div>
   )
 }
-
-export default ResearchPaperPage
-

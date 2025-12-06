@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import HorizontalTimeline from "@/components/horizontal-timeline"
+import TimelineSchedule from "@/components/horizontal-timeline"
 import ReactFullpage, { fullpageApi, Item } from '@fullpage/react-fullpage'
 import { usePathname } from "next/navigation"
 import LoadingHero from "@/components/LoadingHero"
@@ -60,18 +60,6 @@ const DocumentsSection = () => {
   )
 }
 
-// Timeline Slides Component
-const TimelineSlides = () => {
-  return (
-    <>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((index) => (
-        <div key={index} className="slide">
-          <HorizontalTimeline currentSlide={index} onSlideChange={() => { }} />
-        </div>
-      ))}
-    </>
-  )
-}
 
 // Main HomePage Component
 const HomePage = () => {
@@ -133,6 +121,7 @@ const HomePage = () => {
       navigationPosition='right'
       navigationTooltips={['الرئيسية', 'المقدمة', 'جدول الندوة', 'الوثائق']}
       anchors={['hero', 'about', 'timeline', 'documents-section']}
+      normalScrollElements=".timeline-scroll-container"
       onLeave={(_, destination) => handleOnLeave(destination)}
       render={({ fullpageApi: api }) => {
         if (api && !fullpageApi) {
@@ -150,7 +139,7 @@ const HomePage = () => {
               <AboutSection onTimelineClick={handleGoToTimeline} />
             </div>
             <div className="section">
-              <TimelineSlides />
+              <TimelineSchedule />
             </div>
             <div className="section">
               <DocumentsSection />

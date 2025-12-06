@@ -49,8 +49,20 @@ const AnimatedLogo = () => {
 // --- The main reusable component ---
 export default function LoadingHero({ showScrollIndicator, onScrollDown }: LoadingHeroProps) {
   return (
-    <div className="h-dvh text-sand flex flex-col items-center justify-center relative">
-      <div className="flex-grow flex flex-col items-center justify-center">
+    <div className="h-dvh text-sand flex flex-col items-center justify-center relative bg-cover bg-no-repeat overflow-hidden" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
+      {/* Veil ribbon tilted */}
+      <div className="absolute top-4 lg:top-0 left-0 z-0 lg:-rotate-[20deg] origin-bottom-left">
+        <Image
+          src="/veil-l-r.png"
+          alt=""
+          width={1920}
+          height={200}
+          className="h-auto"
+          priority
+        />
+      </div>
+
+      <div className="flex-grow flex flex-col items-center justify-center z-10">
         <AnimatedLogo />
         <h1 className="text-3xl md:text-5xl text-[#D9A566] pb-2 md:mt-8">
           نــــدوة الشيــــخ العلامــــة

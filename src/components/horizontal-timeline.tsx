@@ -1,320 +1,159 @@
 "use client"
 
+import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { Download, Users, MicVocal, FileText } from 'lucide-react'
 
-interface TimelineSlide {
+interface TimelineEvent {
   time: string
   title: string
-  duration: string
-  description: string
-  details?: string[]
-  links?: { text: string; url: string }[]
-  performers?: { name: string; role: string }[]
+  subtitle?: string
 }
 
-// Custom images for specific slides (0-indexed)
-const slideImages: { [key: number]: string } = {
-  0: "/quran.png",          // Slide 1: القرآن الكريم
-  2: "/book-club-logo.png", // Slide 3: كلمة الجمعية
-  5: "/camera.png",         // Slide 6: الفلم الوثائقي
-  6: "/men-sitting.png",    // Slide 7: الجلسة العلمية الأولى
-  8: "/men-sitting.png",    // Slide 9: الجلسة العلمية الثانية
-}
-
-const getSlideImage = (slideIndex: number): string => {
-  return slideImages[slideIndex] || `/timeline/${slideIndex + 1}.png`
-}
-
-const timelineData: TimelineSlide[] = [
+const timelineData: TimelineEvent[] = [
   {
-    time: "6:00 مساءً",
-    duration: "5 دقائق",
-    title: "القرآن الكريم",
-    description: "افتتاح الندوة بتلاوة عطرة من القرآن الكريم، تبركاً وطلباً للتوفيق والسداد في هذا المحفل العلمي المبارك. يتلو القرآن الكريم حفيد الشيخ: أواب بن هلال بن علي بن سليمان الكندي."
+    time: "06:00 مساءً",
+    title: "افتتــاح المعـــرض",
   },
   {
-    time: "",
-    duration: "5 دقائق",
-    title: "كلمة العائلة",
-    description: "كلمة ترحيبية من عائلة الشيخ سليمان الكندي، تعبر عن امتنانهم لإقامة هذه الندوة وتقديرهم للباحثين."
+    time: "06:20 مساءً",
+    title: "القـــرآن الكريـــم",
+    subtitle: "أواب بن هـلال الكنــدي",
   },
   {
-    time: "",
-    duration: "5 دقائق",
-    title: "كلمة الجمعية",
-    description: "كلمة ترحيبية من الجمعية العمانية للكتاب والأدباء، تسلط الضوء على أهمية توثيق تراث الأعلام العمانيين."
+    time: "06:25 مساءً",
+    title: "كلمـة العائلـــة",
+    subtitle: "الشيــخ هــلال بن علي الكنــدي",
   },
   {
-    time: "",
-    duration: "5 دقائق",
-    title: "القصيدة الشعرية",
-    description: "إلقاء قصيدة شعرية مؤثرة من تأليف الشيخ سليمان الكندي أو قصيدة في رثائه.",
+    time: "06:35 مساءً",
+    title: "كلمة الجمعية العمانية للكتاب والأدباء",
+    subtitle: "م. سعيد بن محمــد الصقلاوي",
   },
   {
-    time: "",
-    duration: "10 دقائق",
-    title: "الأوبريت",
-    description: "عرض فني راقٍ يتضمن إلقاء وإنشاد لأبيات من قصائد الشيخ سليمان الكندي.",
-    performers: [
-      { name: "يوسف الكندي", role: "إنشاد" },
-      { name: "منيب الكندي", role: "إنشاد" },
-      { name: "بدر الحارثي", role: "إنشاد" },
-      { name: "محمد الوهيبي", role: "إنشاد" },
-      { name: "هلال الشيادي", role: "إشراف عام" },
-      { name: "سليمان الراشدي", role: "إخراج" }
-    ],
-    details: ["شركة الوطن - الإنتاج والتنظيم"],
-    links: [
-      { text: "تحميل الأبيات الشعرية", url: "/abyat.pdf" }
-    ]
+    time: "06:40 مساءً",
+    title: "القصيـــدة الشعريـــة",
+    subtitle: "الشيخ محمد بن عبدالله الخليلي",
   },
   {
-    time: "",
-    duration: "10 دقائق",
-    title: "الفلم الوثائقي",
-    description: "عرض فيلم وثائقي قصير عن حياة الشيخ سليمان الكندي، يسلط الضوء على أبرز محطات حياته العلمية."
+    time: "06:45 مساءً",
+    title: "عرض الفيلـــم الوثائقي",
   },
   {
-    time: "",
-    duration: "ساعة",
-    title: "الجلسة العلمية الأولى",
-    description: "جلسة بحثية متخصصة تناقش مختلف جوانب حياة وإرث الشيخ سليمان الكندي ",
-    links: [
-      { text: "قاضياً وفقيهاً", url: "/research/sheikh-sulaiman-judge-faqih" },
-      { text: "التكوين والإنجاز", url: "/research/formation-achievement" },
-      { text: "الأنماط البنائية والدلالية", url: "/research/structural-semantic-patterns" }
-    ]
+    time: "07:00 مساءً",
+    title: "الجلســـة العلمية الأولى",
   },
   {
-    time: "",
-    duration: "10 دقائق",
-    title: "التكريم والختام",
-    description: "حفل ختام الندوة يتضمن تكريم الباحثين والمشاركين، وتقديم الشهادات والدروع التذكارية."
+    time: "07:45 مساءً",
+    title: "الأوبريت الشعري",
+    subtitle: "يوسف الكندي، منيب الكندي، محمد الوهيبي، بدر الحارثي",
   },
   {
-    time: "",
-    duration: "ساعة",
-    title: "الجلسة العلمية الثانية",
-    description: "تكملة الجلسات البحثية مع التركيز على الجوانب الأدبية والاجتماعية من حياة الشيخ سليمان الكندي.",
-    links: [
-      { text: "الحجاج في الأحكام القضائية", url: "/research/argumentation-judicial-rulings" },
-      { text: "رسائل وقصائد: دراسة فنية", url: "/research/letters-poems-artistic-study" },
-      { text: "المنهج التربوي", url: "/research/educational-methodology" }
-    ]
-  }
+    time: "08:00 مساءً",
+    title: "الجلســـة العلمية الثانية",
+  },
+  {
+    time: "09:00 مساءً",
+    title: "التكريـــــم",
+  },
 ]
 
-interface HorizontalTimelineProps {
-  currentSlide: number
-  onSlideChange: (slide: number) => void
-}
+const TimelineSchedule = () => {
+  const scrollContainerRef = useRef<HTMLUListElement>(null)
 
-const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ currentSlide }) => {
-  const currentData = timelineData[currentSlide]
+  const handleWheel = useCallback((e: WheelEvent) => {
+    const container = scrollContainerRef.current
+    if (!container) return
 
-  if (!currentData) return null
+    const { scrollTop, scrollHeight, clientHeight } = container
+    const isAtTop = scrollTop <= 0
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1
+
+    // If scrolling down and not at bottom, or scrolling up and not at top, prevent fullpage scroll
+    if ((e.deltaY > 0 && !isAtBottom) || (e.deltaY < 0 && !isAtTop)) {
+      e.stopPropagation()
+    }
+  }, [])
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      container.removeEventListener('wheel', handleWheel)
+    }
+  }, [handleWheel])
 
   return (
-    <div className="h-dvh bg-gradient-to-br from-sand via-[#F5E6D3] to-[#E8D4B0] relative overflow-hidden">
+    <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center pt-20 pb-12 px-4 bg-cover bg-no-repeat" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
+      {/* Header - Fixed */}
       <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-8 z-10"
+      >
+        <div className="flex items-center justify-center gap-4">
+          <h1 className="text-3xl md:text-5xl font-black text-sand">
+            برنامـــج النـــدوة
+          </h1>
+        </div>
+      </motion.div>
+
+      {/* Timeline List - Scrollable */}
+      <motion.ul
+        ref={scrollContainerRef}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="h-full w-full flex items-center justify-center relative px-8"
+        transition={{ duration: 0.8, delay: 0.3 }}
+        className="w-full max-w-3xl space-y-0 overflow-y-auto overflow-x-hidden z-10 timeline-scroll-container"
+        dir="rtl"
       >
-        {/* Main Content */}
-        <div className={`grid gap-8 lg:gap-16 max-w-7xl mx-auto h-full items-center ${currentSlide === 4 ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
-
-          {/* Image Section - Hidden for Operetta slide */}
-          {currentSlide !== 4 && (
-            <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="flex justify-center lg:justify-end order-2 lg:order-1"
-            >
-              <motion.div
-                className="relative"
-                animate={{
-                  y: [0, -15, 0],
-                  transition: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
-              >
-                <motion.div
-                  className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-3xl overflow-hidden shadow-2xl"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Image
-                    src={getSlideImage(currentSlide)}
-                    alt={currentData.title}
-                    width={400}
-                    height={400}
-                    className="w-full h-full object-cover"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                </motion.div>
-
-                {/* Decorative elements */}
-                <motion.div
-                  className="absolute -top-4 -right-4 w-16 h-16 bg-[#BF965A] rounded-full opacity-30"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 180, 360]
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <motion.div
-                  className="absolute -bottom-6 -left-6 w-12 h-12 bg-mud rounded-full opacity-30"
-                  animate={{
-                    scale: [1, 0.8, 1],
-                    rotate: [360, 180, 0]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-              </motion.div>
-            </motion.div>
-          )}
-
-          {/* Text Section */}
-          <motion.div
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="text-right order-1 lg:order-2 space-y-6"
-            dir="rtl"
+        {timelineData.map((event, index) => (
+          <motion.li
+            key={index}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 * index }}
+            className="relative"
           >
-            <motion.div
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-wrap items-center gap-2 md:gap-3 pt-10"
-            >
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-mud leading-tight">
-                {currentData.title}
-              </h2>
-              {currentData.time && (
-                <div className="text-lg md:text-2xl lg:text-3xl font-bold text-white px-2 md:px-6 pt-1.5 pb-1 md:py-3 rounded-2xl shadow-lg bg-mud">
-                  {currentData.time}
-                </div>
-              )}
-              <div className="text-sm md:text-lg lg:text-xl font-semibold text-mud px-2 md:px-4 pt-1.5 pb-1 md:py-3 rounded-2xl bg-white/70 backdrop-blur-sm">
-                {currentData.duration}
-              </div>
-            </motion.div>
-
-            <motion.p
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.1 }}
-              className="text-lg md:text-xl lg:text-2xl text-[#5A5A5A] leading-relaxed font-medium"
-            >
-              {currentData.description}
-            </motion.p>
-
-            {/* Performers Section for Operetta */}
-            {currentData.performers && (
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 1.3 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
-              >
-                <h3 className="text-lg md:text-xl font-bold text-mud mb-4 flex items-center gap-2">
-                  <Users className="w-5 h-5" />
-                  المشاركون
+            {/* Content Row */}
+            <div className="flex items-start justify-between py-3 md:py-4 gap-4">
+              {/* Right side - Title and subtitle */}
+              <div className="flex-1 text-right">
+                <h3 className="text-lg md:text-2xl font-bold text-sand leading-tight">
+                  {event.title}
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {currentData.performers.map((performer, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <MicVocal className="w-4 h-4 text-[#BF965A]" />
-                      <div>
-                        <p className="text-sm md:text-md font-semibold text-gray-800">{performer.name}</p>
-                        <p className="text-xs md:text-sm text-gray-600">{performer.role}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {currentData.details && (
-                  <div className="mt-2 pt-2 border-t border-gray-200">
-                    {currentData.details.map((detail, index) => (
-                      <p key={index} className="text-sm md:text-lg text-gray-700">{detail}</p>
-                    ))}
-                  </div>
+                {event.subtitle && (
+                  <p className="text-sm md:text-lg text-sand">
+                    {event.subtitle}
+                  </p>
                 )}
-              </motion.div>
+              </div>
+
+              {/* Left side - Time */}
+              <div className="text-left">
+                <span className="text-base md:text-xl font-semibold text-sand">
+                  {event.time}
+                </span>
+              </div>
+            </div>
+
+            {index < timelineData.length - 1 && (
+              <div className="relative h-[2.5px] w-full flex items-center">
+                {/* Right semi-oval arc (pointing left) */}
+                <div className="w-1.5 h-3 md:w-2 md:h-4 bg-sand rounded-r-full flex-shrink-0" />
+                {/* Main line */}
+                <div className="flex-1 h-[2.5px] bg-sand" />
+                {/* Left semi-oval arc (pointing right) */}
+                <div className="w-1.5 h-3 md:w-2 md:h-4 bg-sand rounded-l-full flex-shrink-0" />
+              </div>
             )}
-
-            {/* Research Links for Academic Sessions */}
-            {currentData.links && (
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 1.3 }}
-                className="space-y-3"
-              >
-                <h3 className="hidden md:flex text-base md:text-lg font-bold text-mud items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  الأبحاث والوثائق
-                </h3>
-                <div className="flex flex-wrap gap-1 md:gap-3">
-                  {currentData.links.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-3 md:px-4 py-2 bg-mud text-sand rounded-lg hover:bg-mud/90 transition-colors text-sm md:text-lg font-medium"
-                    >
-                      <Download className="w-4 h-4" />
-                      {link.text}
-                    </a>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* Slide Counter */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.7 }}
-          className="absolute top-5 left-4 bg-white/80 backdrop-blur-md rounded-full px-2 pt-1.5 pb-1 text-mud font-bold text-sm md:text-base"
-        >
-          {timelineData.length} / {currentSlide + 1}
-        </motion.div>
-
-        {/* Progress Bar */}
-        <motion.div
-          className="absolute bottom-0 left-0 h-2 bg-gradient-to-r from-[#BF965A] to-mud"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: ((currentSlide + 1) / timelineData.length) }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          style={{
-            transformOrigin: 'left',
-            width: '100%'
-          }}
-        />
-      </motion.div>
+          </motion.li>
+        ))}
+      </motion.ul>
     </div>
   )
 }
 
-export default HorizontalTimeline
+export default TimelineSchedule

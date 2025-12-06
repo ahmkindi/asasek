@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
---color-mud: #400817;
---color-sand: #D9A171;
+--color-mud: #58101D;
+--color-sand: #D7A966;
 }
 
 html {
@@ -24,4 +24,14 @@ body.is-hero-section .navbar-container {
   opacity: 0;
   transform: translateY(-150%); /* Hides it off-screen */
   pointer-events: none; /* Disables interaction when hidden */
+}
+
+/* Timeline scroll container - hide scrollbar but keep functionality */
+.timeline-scroll-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.timeline-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }

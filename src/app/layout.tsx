@@ -40,6 +40,15 @@ const mainFont = localFont({
 export const metadata: Metadata = {
   title: "نــــدوة الشيــــخ العلامــــة",
   description: "نــــدوة الشيــــخ العلامــــة",
+  icons: {
+    icon: [
+      { url: '/favicons/favicon.ico' },
+      { url: '/favicons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/favicons/apple-touch-icon.png',
+  },
+  manifest: '/favicons/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -49,6 +58,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
+      <head>
+        <link rel="preload" href="/mud-bg.webp" as="image" />
+        <link rel="preload" href="/sand-bg.webp" as="image" />
+      </head>
       <body className={`bg-mud ${mainFont.className}`} >
         <Navbar />
         {children}

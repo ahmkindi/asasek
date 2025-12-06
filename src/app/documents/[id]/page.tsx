@@ -1,15 +1,15 @@
-"use client"
-
-import { useParams, useRouter } from "next/navigation"
+import Link from "next/link"
 import { ArrowRight, Calendar, FolderOpen } from "lucide-react"
-import { documents, getDocumentById, getCategoryColor } from "../documentsData"
+import { documents, getDocumentById } from "../documentsData"
 import { notFound } from "next/navigation"
-import Image from "next/image"
 
-export default function DocumentPage() {
-  const params = useParams()
-  const router = useRouter()
-  const id = parseInt(params.id as string, 10)
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default async function DocumentPage({ params }: PageProps) {
+  const { id: idParam } = await params
+  const id = parseInt(idParam, 10)
 
   const document = getDocumentById(id)
 
@@ -18,102 +18,94 @@ export default function DocumentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 pt-24">
-        {/* Back Button */}
-        <button
-          onClick={() => router.push("/documents")}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
-        >
-          <ArrowRight className="w-5 h-5" />
-          <span>العودة إلى الوثائق</span>
-        </button>
-
+    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {/* Document Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(document.category)}`}>
+        <div className="mb-6 text-center pt-12">
+          <h1 className="text-4xl md:text-6xl font-bold text-sand leading-relaxed mb-4">
+            {document.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <span className="px-3 py-1.5 rounded-full text-sm font-medium bg-sand text-mud">
               <FolderOpen className="w-4 h-4 inline ml-1" />
               {document.category}
             </span>
-            <span className="flex items-center gap-1 text-gray-600 text-sm">
+            <span className="inline-flex items-center gap-1 bg-sand text-mud text-sm px-3 py-1.5 rounded-full">
               <Calendar className="w-4 h-4" />
               {document.date}
             </span>
           </div>
-
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-relaxed">
-            {document.title}
-          </h1>
-        </div>
-
-        {/* Document Photos */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">صور الوثيقة الأصلية</h2>
-          <div className={`grid gap-4 ${
-            document.photos.length === 1
-              ? "grid-cols-1"
-              : document.photos.length === 2
-                ? "grid-cols-1 sm:grid-cols-2"
-                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          }`}>
-            {document.photos.map((photo, index) => (
-              <a
-                key={index}
-                href={photo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400 transition-colors"
-              >
-                <img
-                  src={photo}
-                  alt={`${document.title} - صورة ${index + 1}`}
-                  className="w-full h-auto object-contain bg-gray-100"
-                />
-              </a>
-            ))}
-          </div>
-          {document.photos.length > 1 && (
-            <p className="text-sm text-gray-500 mt-3 text-center">
-              اضغط على أي صورة لعرضها بالحجم الكامل
-            </p>
-          )}
         </div>
 
         {/* Document Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">نص الوثيقة</h2>
-          <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
-            <pre className="whitespace-pre-wrap text-gray-800 leading-loose font-sans text-base sm:text-lg">
-              {document.content}
-            </pre>
-          </div>
+        <div className="bg-mud rounded-xl border border-sand py-6 px-3 mb-6">
+          <h2 className="text-2xl md:text-4xl font-bold text-sand mb-2">نص الوثيقة</h2>
+          <p className="text-sand leading-10 md:leading-12 text-xl md:text-2xl">
+            {document.content}
+          </p>
         </div>
 
+        {/* Document Photos */}
+        <div className={`grid gap-4 mb-6 ${document.photos.length === 1
+          ? "grid-cols-1"
+          : document.photos.length === 2
+            ? "grid-cols-1 sm:grid-cols-2"
+            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          }`}>
+          {document.photos.map((photo, index) => (
+            <a
+              key={index}
+              href={photo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block overflow-hidden rounded-lg border border-sand hover:opacity-90 transition-all cursor-pointer"
+            >
+              <img
+                src={photo}
+                alt={`${document.title} - صورة ${index + 1}`}
+                className="w-full h-auto object-contain"
+              />
+            </a>
+          ))}
+        </div>
+        {document.photos.length > 1 && (
+          <p className="text-sm text-sand mb-6 text-center">
+            اضغط على أي صورة لعرضها بالحجم الكامل
+          </p>
+        )}
+
         {/* Navigation to other documents */}
-        <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+        <div className="flex justify-between items-center mt-8 pt-6 border-t border-sand">
           {id > 1 ? (
-            <button
-              onClick={() => router.push(`/documents/${id - 1}`)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            <Link
+              href={`/documents/${id - 1}`}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-sand text-mud rounded-full transition-colors cursor-pointer hover:opacity-90"
             >
               <ArrowRight className="w-5 h-5" />
               <span className="hidden sm:inline">الوثيقة السابقة</span>
               <span className="sm:hidden">السابقة</span>
-            </button>
+            </Link>
           ) : (
             <div />
           )}
 
+          <Link
+            href="/documents"
+            className="inline-flex items-center px-4 py-2 bg-sand text-mud rounded-full transition-colors cursor-pointer hover:opacity-90"
+          >
+            <span>العودة إلى الوثائق</span>
+          </Link>
+
           {id < documents.length ? (
-            <button
-              onClick={() => router.push(`/documents/${id + 1}`)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            <Link
+              href={`/documents/${id + 1}`}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-sand text-mud rounded-full transition-colors cursor-pointer hover:opacity-90"
             >
               <span className="hidden sm:inline">الوثيقة التالية</span>
               <span className="sm:hidden">التالية</span>
               <ArrowRight className="w-5 h-5 rotate-180" />
-            </button>
+            </Link>
           ) : (
             <div />
           )}
