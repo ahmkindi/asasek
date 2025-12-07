@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, Calendar, FolderOpen } from "lucide-react"
 import { documents, getDocumentById } from "../documentsData"
 import { notFound } from "next/navigation"
@@ -18,8 +19,17 @@ export default async function DocumentPage({ params }: PageProps) {
   }
 
   return (
-    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {/* Document Header */}
         <div className="mb-6 text-center pt-12">
           <h1 className="text-4xl md:text-6xl font-bold text-sand leading-relaxed mb-4">

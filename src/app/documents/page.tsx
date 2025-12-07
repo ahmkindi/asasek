@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Calendar, FileText, Search, Filter } from "lucide-react"
 import { documents, categories, getCategoryColor, type Document } from "./documentsData"
 import Link from "next/link"
@@ -37,8 +38,17 @@ const DocumentsPage = () => {
   }
 
   return (
-    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Header */}
         <div className="text-center mb-12 pt-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-sand">

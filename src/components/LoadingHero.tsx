@@ -49,9 +49,18 @@ const AnimatedLogo = () => {
 // --- The main reusable component ---
 export default function LoadingHero({ showScrollIndicator, onScrollDown }: LoadingHeroProps) {
   return (
-    <div className="h-dvh text-sand flex flex-col items-center justify-center relative bg-cover bg-no-repeat overflow-hidden" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
+    <div className="h-dvh text-sand flex flex-col items-center justify-center relative bg-mud overflow-hidden">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
       {/* Veil ribbon tilted */}
-      <div className="absolute top-4 lg:top-0 left-0 z-0 lg:-rotate-[20deg] origin-bottom-left">
+      <div className="absolute top-4 lg:top-0 left-0 z-[1] lg:-rotate-[20deg] origin-bottom-left">
         <Image
           src="/veil-l-r.png"
           alt=""
@@ -82,7 +91,7 @@ export default function LoadingHero({ showScrollIndicator, onScrollDown }: Loadi
       {/* --- Conditionally render the scroll down indicator --- */}
       {showScrollIndicator && (
         <div
-          className="absolute bottom-10 animate-bounce cursor-pointer p-4"
+          className="absolute bottom-10 animate-bounce cursor-pointer p-4 z-10"
           onClick={onScrollDown}
         >
           <svg

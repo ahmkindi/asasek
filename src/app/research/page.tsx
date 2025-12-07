@@ -1,11 +1,21 @@
 import Link from "next/link"
+import Image from "next/image"
 import { User, ArrowLeft } from "lucide-react"
 import { researchPapers, getSummaryPreview } from "./researchData"
 
 export default function ResearchPage() {
   return (
-    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pointer-events-auto">
         {/* Header */}
         <div className="text-center mb-12 pt-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-sand">
@@ -22,10 +32,17 @@ export default function ResearchPage() {
             <Link
               key={paper.id}
               href={`/research/${paper.slug}`}
-              className="bg-sand rounded-xl shadow-sm border border-mud hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden flex flex-col bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url('/sand-bg.webp')" }}
+              className="relative bg-sand rounded-xl shadow-sm border border-mud hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden flex flex-col"
             >
-              <div className="p-6 flex-1 flex flex-col">
+              {/* Card Background Image */}
+              <Image
+                src="/sand-bg.webp"
+                alt=""
+                fill
+                className="object-cover object-center z-0"
+              />
+
+              <div className="relative z-10 p-6 flex-1 flex flex-col pointer-events-auto">
                 {/* Title */}
                 <h3 className="text-xl font-bold text-mud mb-3 group-hover:text-mud transition-colors leading-relaxed">
                   {paper.title}

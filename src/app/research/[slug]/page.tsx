@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getPaperBySlug } from "../researchData"
 
@@ -17,8 +18,17 @@ export default async function ResearchPaperPage({ params }: PageProps) {
   const hasMultipleAuthors = paper.authors.length > 1
 
   return (
-    <div className="inverted-nav min-h-screen bg-mud bg-cover bg-no-repeat" dir="rtl" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pointer-events-auto">
         {/* Header */}
         <div className="rounded-lg p-8 mb-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-sand mb-6">{paper.title}</h1>

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 interface TimelineEvent {
   time: string
@@ -85,7 +86,16 @@ const TimelineSchedule = () => {
   }, [handleWheel])
 
   return (
-    <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center pt-20 pb-12 px-4 bg-cover bg-no-repeat" style={{ backgroundImage: "url('/mud-bg.webp')", backgroundPosition: "center 15%" }}>
+    <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center pt-20 pb-12 px-4">
+      {/* Background Image */}
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+
       {/* Header - Fixed */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
