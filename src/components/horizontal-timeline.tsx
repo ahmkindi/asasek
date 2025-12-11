@@ -110,6 +110,33 @@ const TimelineSchedule = () => {
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
     touchStartYRef.current = e.touches[0].clientY
+    accumulatedDeltaRef.current = 0
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const { scrollTop, scrollHeight, clientHeight } = container
+    const isAtTop = scrollTop <= 0
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1
+
+    // If accumulated enough and at edge, trigger fullpage navigation
+    if (accumulatedDeltaRef.current >= TOUCH_THRESHOLD) {
+      // Access fullpage API from window
+      const fullpageApi = (window as unknown as { fullpage_api?: { moveSectionDown: () => void; moveSectionUp: () => void } }).fullpage_api
+      if (fullpageApi) {
+        if (lastDirectionRef.current === 'down' && isAtBottom) {
+          fullpageApi.moveSectionDown()
+        } else if (lastDirectionRef.current === 'up' && isAtTop) {
+          fullpageApi.moveSectionUp()
+        }
+      }
+    }
+
+    // Reset
+    accumulatedDeltaRef.current = 0
+    lastDirectionRef.current = null
   }, [])
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
@@ -130,15 +157,9 @@ const TimelineSchedule = () => {
       lastDirectionRef.current = direction
     }
 
-    // If at edge and scrolling in that direction
+    // If at edge and scrolling in that direction, accumulate
     if ((direction === 'down' && isAtBottom) || (direction === 'up' && isAtTop)) {
       accumulatedDeltaRef.current += Math.abs(deltaY)
-
-      // If accumulated enough scroll attempts, allow fullpage to take over
-      if (accumulatedDeltaRef.current >= TOUCH_THRESHOLD) {
-        setAllowFullpageScroll(true)
-        return
-      }
     }
 
     // Update touch start for next move calculation
@@ -163,12 +184,14 @@ const TimelineSchedule = () => {
     container.addEventListener('wheel', handleWheel, { passive: false })
     container.addEventListener('touchstart', handleTouchStart, { passive: true })
     container.addEventListener('touchmove', handleTouchMove, { passive: true })
+    container.addEventListener('touchend', handleTouchEnd, { passive: true })
     return () => {
       container.removeEventListener('wheel', handleWheel)
       container.removeEventListener('touchstart', handleTouchStart)
       container.removeEventListener('touchmove', handleTouchMove)
+      container.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [handleWheel, handleTouchStart, handleTouchMove])
+  }, [handleWheel, handleTouchStart, handleTouchMove, handleTouchEnd])
 
   return (
     <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center pt-20 pb-12 px-4">
