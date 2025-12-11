@@ -70,7 +70,7 @@ export default function Navbar() {
               : 'opacity-0 -translate-y-4 pointer-events-none'
               }`}
           >
-            <div className={`rounded-2xl rounded-t-none p-3 flex flex-col gap-1 min-w-[200px] ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}>
+            <div className={`rounded-2xl rounded-t-none p-3 flex flex-col gap-1 ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}>
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href));
                 return (

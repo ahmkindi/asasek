@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { User, ArrowLeft, BookOpen } from "lucide-react"
@@ -10,6 +10,7 @@ import OrderFormModal from "@/components/OrderFormModal"
 
 export default function ResearchPage() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
 
   // Check if order button should be hidden
@@ -21,6 +22,14 @@ export default function ResearchPage() {
       setIsOrderFormOpen(true)
     }
   }, [searchParams, hideOrderButton])
+
+  // Handle modal close - remove query param
+  const handleCloseModal = () => {
+    setIsOrderFormOpen(false)
+    if (searchParams.get("order") === "true") {
+      router.replace("/research", { scroll: false })
+    }
+  }
 
   return (
     <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
@@ -104,7 +113,7 @@ export default function ResearchPage() {
       </div>
 
       {/* Order Form Modal */}
-      <OrderFormModal isOpen={isOrderFormOpen} onClose={() => setIsOrderFormOpen(false)} />
+      <OrderFormModal isOpen={isOrderFormOpen} onClose={handleCloseModal} />
     </div>
   )
 }

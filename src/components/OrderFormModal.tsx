@@ -32,7 +32,7 @@ export default function OrderFormModal({ isOpen, onClose }: OrderFormModalProps)
         {/* Google Form iframe */}
         <div className="w-full overflow-y-auto" style={{ height: 'calc(90vh - 80px)' }}>
           <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSd0hQOTi5NFQfksPMS0VOrE2GRvOdWWpR9WyaXlGmNxC3yo_A/viewform?embedded=true"
+            src="https://docs.google.com/forms/d/e/1FAIpQLSd0hQOTi5NFQfksPMS0VOrE2GRvOdWWpR9WyaXlGmNxC3yo_A/viewform?embedded=true&hl=ar"
             width="100%"
             height="890"
             frameBorder="0"
