@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
@@ -45,7 +45,7 @@ const timelineData: TimelineEvent[] = [
   },
   {
     time: "07:45 مساءً",
-    title: "الأوبريت الشعري",
+    title: "الأوبريت الإنشادي",
     subtitle: "يوسف الكندي، منيب الكندي، محمد الوهيبي، بدر الحارثي",
   },
   {
@@ -54,12 +54,18 @@ const timelineData: TimelineEvent[] = [
   },
   {
     time: "09:00 مساءً",
-    title: "التكريـــــم",
+    title: "التكريــــــم والختام",
   },
 ]
 
+// Threshold for accumulated scroll delta before triggering slide change
+const SCROLL_THRESHOLD = 150
+
 const TimelineSchedule = () => {
   const scrollContainerRef = useRef<HTMLUListElement>(null)
+  const accumulatedDeltaRef = useRef(0)
+  const lastDirectionRef = useRef<'up' | 'down' | null>(null)
+  const [allowFullpageScroll, setAllowFullpageScroll] = useState(false)
 
   const handleWheel = useCallback((e: WheelEvent) => {
     const container = scrollContainerRef.current
@@ -68,12 +74,48 @@ const TimelineSchedule = () => {
     const { scrollTop, scrollHeight, clientHeight } = container
     const isAtTop = scrollTop <= 0
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1
+    const direction = e.deltaY > 0 ? 'down' : 'up'
 
-    // If scrolling down and not at bottom, or scrolling up and not at top, prevent fullpage scroll
-    if ((e.deltaY > 0 && !isAtBottom) || (e.deltaY < 0 && !isAtTop)) {
-      e.stopPropagation()
+    // Reset accumulated delta if direction changes
+    if (lastDirectionRef.current !== direction) {
+      accumulatedDeltaRef.current = 0
+      lastDirectionRef.current = direction
     }
-  }, [])
+
+    // If at edge and scrolling in that direction
+    if ((direction === 'down' && isAtBottom) || (direction === 'up' && isAtTop)) {
+      accumulatedDeltaRef.current += Math.abs(e.deltaY)
+
+      // If accumulated enough scroll attempts, allow fullpage to take over
+      if (accumulatedDeltaRef.current >= SCROLL_THRESHOLD) {
+        setAllowFullpageScroll(true)
+        // Don't stop propagation - let fullpage handle it
+        return
+      }
+    } else {
+      // Reset when not at edge
+      accumulatedDeltaRef.current = 0
+      setAllowFullpageScroll(false)
+    }
+
+    // Prevent fullpage scroll while scrolling within the container
+    if (!allowFullpageScroll) {
+      if ((e.deltaY > 0 && !isAtBottom) || (e.deltaY < 0 && !isAtTop)) {
+        e.stopPropagation()
+      }
+    }
+  }, [allowFullpageScroll])
+
+  // Reset allowFullpageScroll after a short delay when user stops scrolling
+  useEffect(() => {
+    if (allowFullpageScroll) {
+      const timer = setTimeout(() => {
+        setAllowFullpageScroll(false)
+        accumulatedDeltaRef.current = 0
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [allowFullpageScroll])
 
   useEffect(() => {
     const container = scrollContainerRef.current

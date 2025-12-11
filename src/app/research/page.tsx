@@ -1,9 +1,27 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { User, ArrowLeft } from "lucide-react"
+import { User, ArrowLeft, BookOpen } from "lucide-react"
 import { researchPapers, getSummaryPreview } from "./researchData"
+import OrderFormModal from "@/components/OrderFormModal"
 
 export default function ResearchPage() {
+  const searchParams = useSearchParams()
+  const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
+
+  // Check if order button should be hidden
+  const hideOrderButton = process.env.NEXT_PUBLIC_HIDE_ORDER_BUTTON === "true"
+
+  // Open form if query param is present
+  useEffect(() => {
+    if (searchParams.get("order") === "true" && !hideOrderButton) {
+      setIsOrderFormOpen(true)
+    }
+  }, [searchParams, hideOrderButton])
+
   return (
     <div className="inverted-nav relative min-h-screen bg-mud overflow-hidden" dir="rtl">
       {/* Background Image */}
@@ -19,11 +37,22 @@ export default function ResearchPage() {
         {/* Header */}
         <div className="text-center mb-12 pt-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-sand">
-            البحوث العلمية
+            البحـــــوث العلميـــــة
           </h1>
-          <p className="text-lg sm:text-xl text-sand max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-sand max-w-3xl mx-auto mb-8">
             مجموعة من الأبحاث العلمية المحكمة حول حياة وتراث الشيخ سليمان بن علي الكندي
           </p>
+
+          {/* Order Book Button */}
+          {!hideOrderButton && (
+            <button
+              onClick={() => setIsOrderFormOpen(true)}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-sand text-mud rounded-full text-lg font-bold hover:opacity-90 transition-opacity cursor-pointer"
+            >
+              <BookOpen className="w-6 h-6" />
+              <span>اطلب نسختك من الكتاب</span>
+            </button>
+          )}
         </div>
 
         {/* Research Papers Grid */}
@@ -73,6 +102,9 @@ export default function ResearchPage() {
           ))}
         </div>
       </div>
+
+      {/* Order Form Modal */}
+      <OrderFormModal isOpen={isOrderFormOpen} onClose={() => setIsOrderFormOpen(false)} />
     </div>
   )
 }

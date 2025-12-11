@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getPaperBySlug } from "../researchData"
+import OrderBookButton from "./OrderBookButton"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -61,14 +62,15 @@ export default async function ResearchPaperPage({ params }: PageProps) {
           ))}
         </div>
 
-        {/* Back to all research button */}
-        <div className="flex justify-center">
+        {/* Back to all research and Order Book buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/research"
             className="inline-flex items-center justify-center px-8 py-4 bg-sand text-mud rounded-full text-lg font-bold hover:opacity-90 transition-opacity cursor-pointer"
           >
             جميع البحوث العلمية
           </Link>
+          <OrderBookButton />
         </div>
       </div>
     </div>

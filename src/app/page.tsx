@@ -5,20 +5,27 @@ import TimelineSchedule from "@/components/horizontal-timeline"
 import ReactFullpage, { fullpageApi, Item } from '@fullpage/react-fullpage'
 import { usePathname } from "next/navigation"
 import LoadingHero from "@/components/LoadingHero"
+import { BookOpen } from "lucide-react"
+import OrderFormModal from "@/components/OrderFormModal"
 
 const pluginWrapper = () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('../static/fullpage.scrollHorizontally.min');
 };
 
-const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
+const AboutSection = ({ onTimelineClick, onOrderClick, hideOrderButton }: { onTimelineClick: () => void; onOrderClick: () => void; hideOrderButton: boolean }) => {
   return (
-    <div className="h-dvh relative flex items-center justify-start overflow-hidden">
-      <div className="w-full z-20 h-full absolute bg-gradient-to-r from-[#D9A566] from-60% to-[rgba(217,165,102,0.6)] md:to-transparent" />
-      <div className="absolute z-30 h-full w-full md:w-1/2 lg:w-2/5 xl:w-1/3 p-8 flex items-center left-0">
-        <div className="text-mud space-y-4 max-w-lg">
-          <h2 className="text-4xl md:text-7xl font-black">المــــقدمة</h2>
-          <p className="text-lg md:text-2xl font-semibold leading-relaxed">
+    <div className="h-dvh relative flex items-end md:items-center justify-center md:justify-start overflow-hidden">
+      <div className="w-full z-20 h-full absolute" />
+
+      {/* Mobile: bottom-aligned, full-width banner | Desktop: left-aligned card */}
+      <div className="absolute z-30 w-full md:w-1/2 lg:w-2/5 xl:w-1/3 md:h-full bottom-0 md:bottom-auto md:left-0 flex items-end md:items-center pb-4 md:pb-0 md:p-8">
+        <div className="text-mud space-y-4 w-full md:max-w-lg">
+          {/* Title - centered */}
+          <h2 className="text-5xl md:text-7xl font-black text-center px-4 md:px-0">المــــقدمة</h2>
+
+          {/* Banner - full width on mobile, rounded on desktop */}
+          <p className="text-lg md:text-2xl font-semibold leading-relaxed bg-sand p-4 md:rounded-2xl text-justify">
             سعيًا نحو توثيق سيرة الشيخ سليمان بن علي الكندي،
             وتخليدًا لإسهاماته الاجتماعية والإصلاحية، تأتي هذه الندوة
             كمنصة علمية تسهم في جمع وتوثيق إرثه الفكري والعلمي.
@@ -26,11 +33,25 @@ const AboutSection = ({ onTimelineClick }: { onTimelineClick: () => void }) => {
             وفتح آفاق بحثية جديدة، لضمان تحقيق مستوى يليق بهذه
             الشخصية الفريدة.
           </p>
-          <div
-            className="mt-6 text-lg md:text-2xl inline-block bg-mud text-sand px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold hover:bg-amber-900 transition-colors cursor-pointer"
-            onClick={onTimelineClick}
-          >
-            جدوــــل الندوة
+
+          {/* Buttons - centered on mobile, show only one */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-2 px-4 md:px-0">
+            {hideOrderButton ? (
+              <div
+                className="text-lg md:text-2xl inline-block bg-mud text-sand px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold hover:bg-amber-900 transition-colors cursor-pointer"
+                onClick={onTimelineClick}
+              >
+                جدوــــل الندوة
+              </div>
+            ) : (
+              <div
+                className="text-lg md:text-2xl inline-flex items-center gap-2 bg-mud text-sand px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold hover:bg-amber-900 transition-colors cursor-pointer"
+                onClick={onOrderClick}
+              >
+                <BookOpen className="w-5 h-5 md:w-6 md:h-6" />
+                <span>اطلب نسختك من الكتاب</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -64,6 +85,10 @@ const DocumentsSection = () => {
 // Main HomePage Component
 const HomePage = () => {
   const [fullpageApi, setFullpageApi] = useState<fullpageApi | null>(null);
+  const [isOrderFormOpen, setIsOrderFormOpen] = useState(false);
+
+  // Check if order button should be hidden
+  const hideOrderButton = process.env.NEXT_PUBLIC_HIDE_ORDER_BUTTON === "true";
 
   const handleScrollDown = useCallback(() => {
     if (fullpageApi) {
@@ -76,6 +101,10 @@ const HomePage = () => {
       fullpageApi.moveTo(3); // Corresponds to the 'timeline' anchor
     }
   }, [fullpageApi]);
+
+  const handleOrderClick = useCallback(() => {
+    setIsOrderFormOpen(true);
+  }, []);
 
   // --- NEW: Callback to control navbar visibility ---
   const handleOnLeave = (destination: Item) => {
@@ -109,45 +138,50 @@ const HomePage = () => {
   }, [fullpageApi, pathname]);
 
   return (
-    <ReactFullpage
-      pluginWrapper={pluginWrapper}
-      licenseKey={process.env.NEXT_PUBLIC_FULLPAGE_LICENSE_KEY}
-      scrollingSpeed={1000}
-      scrollHorizontally={true}
-      scrollHorizontallyKey={process.env.NEXT_PUBLIC_FULLPAGE_SCROLL_HORIZONTALLY_KEY}
-      credits={{ enabled: false }}
-      navigation={true}
-      controlArrows={false}
-      navigationPosition='right'
-      navigationTooltips={['الرئيسية', 'المقدمة', 'جدول الندوة', 'الوثائق']}
-      anchors={['hero', 'about', 'timeline', 'documents-section']}
-      normalScrollElements=".timeline-scroll-container"
-      onLeave={(_, destination) => handleOnLeave(destination)}
-      render={({ fullpageApi: api }) => {
-        if (api && !fullpageApi) {
-          setFullpageApi(api);
-        }
-        return (
-          <ReactFullpage.Wrapper>
-            <div className="section">
-              <LoadingHero
-                showScrollIndicator={true}
-                onScrollDown={handleScrollDown}
-              />
-            </div>
-            <div className="section">
-              <AboutSection onTimelineClick={handleGoToTimeline} />
-            </div>
-            <div className="section">
-              <TimelineSchedule />
-            </div>
-            <div className="section">
-              <DocumentsSection />
-            </div>
-          </ReactFullpage.Wrapper>
-        );
-      }}
-    />
+    <>
+      <ReactFullpage
+        pluginWrapper={pluginWrapper}
+        licenseKey={process.env.NEXT_PUBLIC_FULLPAGE_LICENSE_KEY}
+        scrollingSpeed={1000}
+        scrollHorizontally={true}
+        scrollHorizontallyKey={process.env.NEXT_PUBLIC_FULLPAGE_SCROLL_HORIZONTALLY_KEY}
+        credits={{ enabled: false }}
+        navigation={true}
+        controlArrows={false}
+        navigationPosition='right'
+        navigationTooltips={['الرئيسية', 'المقدمة', 'جدول الندوة', 'الوثائق']}
+        anchors={['hero', 'about', 'timeline', 'documents-section']}
+        normalScrollElements=".timeline-scroll-container"
+        onLeave={(_, destination) => handleOnLeave(destination)}
+        render={({ fullpageApi: api }) => {
+          if (api && !fullpageApi) {
+            setFullpageApi(api);
+          }
+          return (
+            <ReactFullpage.Wrapper>
+              <div className="section">
+                <LoadingHero
+                  showScrollIndicator={true}
+                  onScrollDown={handleScrollDown}
+                />
+              </div>
+              <div className="section">
+                <AboutSection onTimelineClick={handleGoToTimeline} onOrderClick={handleOrderClick} hideOrderButton={hideOrderButton} />
+              </div>
+              <div className="section">
+                <TimelineSchedule />
+              </div>
+              <div className="section">
+                <DocumentsSection />
+              </div>
+            </ReactFullpage.Wrapper>
+          );
+        }}
+      />
+
+      {/* Order Form Modal */}
+      <OrderFormModal isOpen={isOrderFormOpen} onClose={() => setIsOrderFormOpen(false)} />
+    </>
   );
 };
 

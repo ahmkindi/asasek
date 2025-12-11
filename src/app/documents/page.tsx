@@ -52,7 +52,7 @@ const DocumentsPage = () => {
         {/* Header */}
         <div className="text-center mb-12 pt-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-sand">
-            وثائق الشيخ سليمان الكندي
+            وثـــــائق الشيـــــخ سليمـــــان الكنـــــدي
           </h1>
           <p className="text-lg sm:text-xl text-sand max-w-3xl mx-auto">
             مجموعة نادرة من الوثائق التاريخية والمخطوطات الأصلية للشيخ سليمان بن علي الكندي

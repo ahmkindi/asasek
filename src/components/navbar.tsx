@@ -9,14 +9,12 @@ export default function Navbar() {
   const pathname = usePathname();
 
   // Check if we're on documents or research pages
-  const isInvertedPage = pathname?.startsWith('/documents') || pathname?.startsWith('/research');
+  const isInvertedPage = pathname?.startsWith('/documents') || pathname?.startsWith('/research') || pathname?.startsWith('/live');
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Use a type guard to check if the target is an Element
       if (event.target instanceof Element) {
         if (!event.target.closest('.navbar-container')) {
-          // TypeScript now knows that event.target is an Element
           setIsDropdownOpen(false);
         }
       }
@@ -28,9 +26,9 @@ export default function Navbar() {
     }
   }, [isDropdownOpen]);
 
-  // --- MODIFIED: Updated links as per your request ---
   const navLinks = [
-    { href: '/#timeline', label: 'جدوــــل الندوة' },
+    { href: '/', label: 'الرئيسية' },
+    { href: '/live', label: 'البث المباشر' },
     { href: '/research', label: 'البحوث' },
     { href: '/documents', label: 'الوثائق' },
   ];
@@ -52,9 +50,9 @@ export default function Navbar() {
       >
         <div className="relative flex flex-col items-center justify-center">
           <div
-            className={`px-5 py-1 rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : 'md:px-28'} ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}
+            className={`px-5 py-1 rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : ''} ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}
           >
-            <Link href="/#hero" className="block">
+            <div className="block cursor-pointer">
               <Image
                 src={isInvertedPage ? '/signature-mud.png' : '/signature-sand.png'}
                 alt="سليمان"
@@ -63,27 +61,32 @@ export default function Navbar() {
                 priority
                 className="transition-transform duration-500 hover:scale-107 w-[120px] h-auto md:w-[180px]"
               />
-            </Link>
+            </div>
           </div>
 
           <div
-            className={`transition-all duration-500 ease-out ${isDropdownOpen
+            className={`absolute w-full top-full left-1/2 -translate-x-1/2 transition-all duration-500 ease-out ${isDropdownOpen
               ? 'opacity-100 translate-y-0 pointer-events-auto'
               : 'opacity-0 -translate-y-4 pointer-events-none'
               }`}
           >
-            <div className={`rounded-2xl p-2 flex ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}>
+            <div className={`rounded-2xl rounded-t-none p-3 flex flex-col gap-1 min-w-[200px] ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}>
               {navLinks.map((link) => {
+                const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href));
                 return (
                   <Link
                     href={link.href}
                     key={link.href}
                     className={`
-                      w-32 md:w-48 py-2 md:py-4 flex items-center justify-center
-                      transition-all duration-500 rounded-2xl
-                      text-sm md:text-base
-                      ${isInvertedPage ? 'text-mud hover:text-mud/70' : 'text-sand hover:text-white'}
+                      py-3 px-4 flex items-center justify-center
+                      transition-all duration-300 rounded-xl
+                      text-base md:text-lg font-medium
+                      ${isInvertedPage
+                        ? `text-mud hover:bg-mud hover:text-sand ${isActive ? 'bg-mud/10' : ''}`
+                        : `text-sand hover:bg-sand hover:text-mud ${isActive ? 'bg-sand/10' : ''}`
+                      }
                     `}
+                    onClick={() => setIsDropdownOpen(false)}
                   >
                     {link.label}
                   </Link>

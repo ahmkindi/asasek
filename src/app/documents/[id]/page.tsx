@@ -50,7 +50,7 @@ export default async function DocumentPage({ params }: PageProps) {
 
         {/* Document Content */}
         <div className="bg-mud rounded-xl border border-sand py-6 px-3 mb-6">
-          <h2 className="text-2xl md:text-4xl font-bold text-sand mb-2">نص الوثيقة</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-sand mb-2">نـــــص الوثيقـــــة</h2>
           <p className="text-sand leading-10 md:leading-12 text-xl md:text-2xl">
             {document.content}
           </p>
