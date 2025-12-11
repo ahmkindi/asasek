@@ -60,11 +60,13 @@ const timelineData: TimelineEvent[] = [
 
 // Threshold for accumulated scroll delta before triggering slide change
 const SCROLL_THRESHOLD = 150
+const TOUCH_THRESHOLD = 50
 
 const TimelineSchedule = () => {
   const scrollContainerRef = useRef<HTMLUListElement>(null)
   const accumulatedDeltaRef = useRef(0)
   const lastDirectionRef = useRef<'up' | 'down' | null>(null)
+  const touchStartYRef = useRef(0)
   const [allowFullpageScroll, setAllowFullpageScroll] = useState(false)
 
   const handleWheel = useCallback((e: WheelEvent) => {
@@ -106,6 +108,43 @@ const TimelineSchedule = () => {
     }
   }, [allowFullpageScroll])
 
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchStartYRef.current = e.touches[0].clientY
+  }, [])
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    const touchY = e.touches[0].clientY
+    const deltaY = touchStartYRef.current - touchY
+    const direction = deltaY > 0 ? 'down' : 'up'
+
+    const { scrollTop, scrollHeight, clientHeight } = container
+    const isAtTop = scrollTop <= 0
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1
+
+    // Reset accumulated delta if direction changes
+    if (lastDirectionRef.current !== direction) {
+      accumulatedDeltaRef.current = 0
+      lastDirectionRef.current = direction
+    }
+
+    // If at edge and scrolling in that direction
+    if ((direction === 'down' && isAtBottom) || (direction === 'up' && isAtTop)) {
+      accumulatedDeltaRef.current += Math.abs(deltaY)
+
+      // If accumulated enough scroll attempts, allow fullpage to take over
+      if (accumulatedDeltaRef.current >= TOUCH_THRESHOLD) {
+        setAllowFullpageScroll(true)
+        return
+      }
+    }
+
+    // Update touch start for next move calculation
+    touchStartYRef.current = touchY
+  }, [])
+
   // Reset allowFullpageScroll after a short delay when user stops scrolling
   useEffect(() => {
     if (allowFullpageScroll) {
@@ -122,10 +161,14 @@ const TimelineSchedule = () => {
     if (!container) return
 
     container.addEventListener('wheel', handleWheel, { passive: false })
+    container.addEventListener('touchstart', handleTouchStart, { passive: true })
+    container.addEventListener('touchmove', handleTouchMove, { passive: true })
     return () => {
       container.removeEventListener('wheel', handleWheel)
+      container.removeEventListener('touchstart', handleTouchStart)
+      container.removeEventListener('touchmove', handleTouchMove)
     }
-  }, [handleWheel])
+  }, [handleWheel, handleTouchStart, handleTouchMove])
 
   return (
     <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center pt-20 pb-12 px-4">
