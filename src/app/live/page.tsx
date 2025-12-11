@@ -157,7 +157,10 @@ export default function LivePage() {
           // Show countdown
           <div className="text-center">
             <p className="text-2xl md:text-4xl text-sand mb-8">
-              ترقـــــبوا انطـــــلاق الندوة
+              ترقـــــبوا انطـــــلاق ندوة الشيخ سليـــــمان بن علي الكندي
+            </p>
+            <p className="text-2xl md:text-4xl text-sand mb-8">
+              إرث سليـــــمان
             </p>
 
             <div className="flex justify-center items-center gap-2 md:gap-4" dir="ltr">
