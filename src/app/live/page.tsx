@@ -71,6 +71,12 @@ export default function LivePage() {
   const youtubeUrl = process.env.NEXT_PUBLIC_YOUTUBE_LIVE_URL
 
   useEffect(() => {
+    // Redirect to YouTube if URL exists and it's live time
+    if (youtubeUrl && isPastTarget(targetDate)) {
+      window.location.href = youtubeUrl
+      return
+    }
+
     setMounted(true)
     setTimeLeft(calculateTimeLeft(targetDate))
     setIsLive(isPastTarget(targetDate))
@@ -78,11 +84,15 @@ export default function LivePage() {
     const timer = setInterval(() => {
       const newTimeLeft = calculateTimeLeft(targetDate)
       setTimeLeft(newTimeLeft)
+      // Redirect when it becomes live
+      if (isPastTarget(targetDate) && youtubeUrl) {
+        window.location.href = youtubeUrl
+      }
       setIsLive(isPastTarget(targetDate))
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [targetDate])
+  }, [targetDate, youtubeUrl])
 
   // Extract YouTube video ID from URL
   const getYoutubeEmbedUrl = (url: string): string => {
