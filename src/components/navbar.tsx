@@ -50,7 +50,7 @@ export default function Navbar() {
       >
         <div className="relative flex flex-col items-center justify-center">
           <div
-            className={`px-5 py-1 rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none' : ''} ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}
+            className={`px-5 py-1 rounded-2xl transition-all duration-500 ease-out ${isDropdownOpen ? 'rounded-b-none navbar-active' : 'navbar-pulse'} ${isInvertedPage ? 'bg-sand' : 'bg-mud'}`}
           >
             <div className="block cursor-pointer">
               <Image

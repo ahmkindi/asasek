@@ -35,3 +35,24 @@ body.is-hero-section .navbar-container {
 .timeline-scroll-container::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* Navbar pulsating effect */
+@keyframes navbar-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.85;
+  }
+}
+
+.navbar-pulse {
+  animation: navbar-pulse 2.5s ease-in-out infinite;
+}
+
+.navbar-pulse:hover,
+.navbar-active {
+  animation: none;
+}

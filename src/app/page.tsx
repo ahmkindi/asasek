@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import LoadingHero from "@/components/LoadingHero"
 import { BookOpen } from "lucide-react"
 import OrderFormModal from "@/components/OrderFormModal"
+import Image from "next/image"
 
 const pluginWrapper = () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -72,10 +73,17 @@ const AboutSection = ({ onTimelineClick, onOrderClick, hideOrderButton }: { onTi
 // Documents Section Component
 const DocumentsSection = () => {
   return (
-    <div className="h-dvh bg-mud from-gray-50 to-gray-100 flex items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-3xl md:text-5xl font-bold text-sand mb-4">خريطــــة النــــدوة</h2>
-        <p className="text-lg md:text-2xl text-[#D9A566]">هنا صورة توضح تقسيم القلعة ومواقع المعارض المصاحبة والمسرح</p>
+    <div className="h-dvh bg-mud relative overflow-hidden flex flex-col items-center justify-center px-4">
+      <Image
+        src="/mud-bg.webp"
+        alt=""
+        fill
+        className="object-cover object-[center_15%] z-0"
+        priority
+      />
+      <div className="text-center z-10">
+        <h2 className="text-3xl md:text-5xl xl:text-7xl font-bold text-sand mb-4">اضغـــط على التوقيـــع أعـــلاه للمـــزيد</h2>
+        <p className="text-lg md:text-2xl xl:text-3xl text-sand">البحوث والوثائق</p>
       </div>
     </div>
   )
