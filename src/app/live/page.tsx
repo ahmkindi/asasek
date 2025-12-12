@@ -86,12 +86,20 @@ export default function LivePage() {
 
   // Extract YouTube video ID from URL
   const getYoutubeEmbedUrl = (url: string): string => {
+    // Handle /live/ URLs (e.g., https://www.youtube.com/live/VIDEO_ID)
+    const liveMatch = url.match(/youtube\.com\/live\/([^"&?\/\s]{11})/)
+    if (liveMatch) {
+      return `https://www.youtube.com/embed/${liveMatch[1]}?autoplay=1`
+    }
+
+    // Handle standard YouTube URLs
     const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)
     if (videoIdMatch) {
       return `https://www.youtube.com/embed/${videoIdMatch[1]}?autoplay=1`
     }
-    // If it's already an embed URL or live URL
-    if (url.includes('/embed/') || url.includes('/live/')) {
+
+    // If it's already an embed URL, use it directly
+    if (url.includes('/embed/')) {
       return url
     }
     return url
